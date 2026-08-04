@@ -19,11 +19,7 @@ export function HomePage() {
 
   return (
     <>
-      <Hero
-        filters={filters}
-        onFiltersChange={setFilters}
-        onSearch={scrollToInventory}
-      />
+      <Hero onSearch={scrollToInventory} />
       <TrustStrip />
       <Inventory filters={filters} onFiltersChange={setFilters} />
       <PaymentCalculator />

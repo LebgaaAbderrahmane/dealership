@@ -1,45 +1,22 @@
-import { useState } from 'react';
 import { motion } from 'motion/react';
-import { ArrowRight, Search, SlidersHorizontal } from 'lucide-react';
-import { HERO_IMAGE, VEHICLE_MAKES } from '../data/inventory';
+import { ArrowRight } from 'lucide-react';
+import { HERO_IMAGE } from '../data/inventory';
 import { Button } from './ui/button';
-import { ChipSelect } from './ui/chip-select';
-import { Slider } from './ui/slider';
-import { Drawer } from './ui/drawer';
-import type { VehicleFilters } from '../lib/filters';
 
 const HERO_LINES = ['Find it. Finance it.', 'Drive it home', 'today.'];
 
+const STATS = [
+  { value: '340+', label: 'Vehicles in stock' },
+  { value: '12', label: 'Premium makes' },
+  { value: '172', label: 'Point inspection' },
+  { value: '4.8★', label: 'Buyer rating' },
+];
+
 interface HeroProps {
-  filters: VehicleFilters;
-  onFiltersChange: (next: VehicleFilters) => void;
   onSearch: () => void;
 }
 
-export function Hero({ filters, onFiltersChange, onSearch }: HeroProps) {
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [localMake, setLocalMake] = useState(filters.make);
-  const [localQuery, setLocalQuery] = useState(filters.query);
-  const [localMonthly, setLocalMonthly] = useState(
-    filters.maxMonthly >= 10000 ? 800 : filters.maxMonthly,
-  );
-
-  const applySearch = () => {
-    onFiltersChange({
-      ...filters,
-      make: localMake,
-      maxMonthly: localMonthly,
-      query: localQuery,
-    });
-    onSearch();
-    setSearchOpen(false);
-  };
-
-  const makeOptions = [
-    { value: 'All', label: 'All makes' },
-    ...VEHICLE_MAKES.map((m) => ({ value: m, label: m })),
-  ];
-
+export function Hero({ onSearch }: HeroProps) {
   return (
     <section id="top" className="relative flex min-h-screen items-center overflow-hidden bg-[var(--background)]">
       <img
@@ -105,96 +82,25 @@ export function Hero({ filters, onFiltersChange, onSearch }: HeroProps) {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.97 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-12 hidden max-w-3xl items-stretch gap-4 rounded-2xl border border-[var(--border)] bg-white/[0.04] p-4 backdrop-blur-xl md:flex"
-          style={{ boxShadow: '0 20px 60px -20px rgba(10,144,255,0.35)' }}
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.65, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-14 w-full"
         >
-          <div className="flex-1">
-            <ChipSelect
-              ariaLabel="Make"
-              value={localMake}
-              options={makeOptions}
-              onChange={setLocalMake}
-              className="w-full justify-between"
-            />
-          </div>
-          <div className="flex-1">
-            <input
-              type="text"
-              placeholder="Model"
-              value={localQuery}
-              onChange={(e) => setLocalQuery(e.target.value)}
-              className="h-9 w-full rounded-full border border-[var(--border)] bg-[var(--card)] px-4 text-sm text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus:border-[var(--primary)] focus:outline-none"
-            />
-          </div>
-          <div className="flex-[1.4] px-2 py-1">
-            <Slider
-              label="Max monthly payment"
-              value={localMonthly}
-              min={300}
-              max={1500}
-              step={50}
-              onChange={setLocalMonthly}
-              displayValue={`$${localMonthly}/mo`}
-            />
-          </div>
-          <Button size="md" onClick={applySearch}>
-            <Search className="h-4 w-4" />
-            Search
-          </Button>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.97 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-10 md:hidden"
-        >
-          <Button
-            className="w-full py-4"
-            size="lg"
-            variant="ghost"
-            onClick={() => setSearchOpen(true)}
-          >
-            <SlidersHorizontal className="h-4 w-4" />
-            Search inventory
-          </Button>
+          <dl className="grid w-full grid-cols-2 gap-y-8 rounded-2xl border border-[var(--border)] bg-white/[0.04] px-6 py-8 backdrop-blur-xl sm:grid-cols-4 lg:px-10">
+            {STATS.map((s) => (
+              <div key={s.label} className="text-center">
+                <dd className="font-display text-3xl font-extrabold tracking-tight text-[var(--foreground)] md:text-[40px] md:leading-none">
+                  {s.value}
+                </dd>
+                <dt className="mt-2 text-xs uppercase tracking-[0.18em] text-[var(--muted-foreground)]">
+                  {s.label}
+                </dt>
+              </div>
+            ))}
+          </dl>
         </motion.div>
       </div>
-
-      <Drawer open={searchOpen} onClose={() => setSearchOpen(false)} title="Search inventory">
-        <div className="space-y-5">
-          <ChipSelect
-            ariaLabel="Make"
-            value={localMake}
-            options={makeOptions}
-            onChange={setLocalMake}
-            className="w-full justify-between"
-          />
-          <input
-            type="text"
-            placeholder="Model"
-            value={localQuery}
-            onChange={(e) => setLocalQuery(e.target.value)}
-            className="h-10 w-full rounded-full border border-[var(--border)] bg-[var(--card)] px-4 text-sm text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus:border-[var(--primary)] focus:outline-none"
-          />
-          <Slider
-            label="Max monthly payment"
-            value={localMonthly}
-            min={300}
-            max={1500}
-            step={50}
-            onChange={setLocalMonthly}
-            displayValue={`$${localMonthly}/mo`}
-          />
-          <Button className="w-full py-4" onClick={applySearch}>
-            <Search className="h-4 w-4" />
-            Search
-          </Button>
-        </div>
-      </Drawer>
     </section>
   );
 }
