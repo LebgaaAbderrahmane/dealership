@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(220, 14%, 8%); /* #12141a near-black */
+  --foreground: hsl(210, 16%, 95%); /* #eff1f4 */
+  --primary: hsl(206, 100%, 52%); /* #0a90ff electric blue */
+  --primary-foreground: hsl(0, 0%, 100%);
+  --muted-foreground: hsl(215, 10%, 58%);
+  --border: hsl(220, 12%, 20%);
+  --card: hsl(220, 13%, 12%);
+  --card-elevated: hsl(220, 12%, 16%);
+  --success: hsl(152, 62%, 44%);
+}
+
+@layer base {
+  * {
+    @apply border-[var(--border)];
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-[var(--background)] font-sans text-[var(--foreground)];
+    font-weight: 300;
+    line-height: 1.7;
+    font-synthesis: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--primary) 40%, transparent);
+    color: var(--foreground);
+  }
+}
+
+@layer components {
+  .font-display {
+    font-family: 'Sora', system-ui, sans-serif;
+  }
+
+  .eyebrow {
+    @apply text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--primary)];
+  }
+
+  .container-apex {
+    @apply mx-auto w-full max-w-[1320px] px-6 md:px-16;
+  }
+
+  .glow-btn {
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--primary) 40%, transparent),
+      0 8px 30px -6px color-mix(in srgb, var(--primary) 45%, transparent);
+  }
+}
+
+/* Custom scrollbar for horizontally scrollable chips */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Blue glow pulse for trust strip icons (one-shot) */
+@keyframes glow-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(10, 144, 255, 0.55);
+    opacity: 1;
+  }
+  70% {
+    box-shadow: 0 0 0 18px rgba(10, 144, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(10, 144, 255, 0);
+    opacity: 1;
+  }
+}
+.glow-pulse {
+  animation: glow-pulse 0.6s ease-out both;
+}
+
+/* Slow gradient drift for the final CTA band */
+@keyframes gradient-drift {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+.gradient-drift {
+  background-size: 200% 200%;
+  animation: gradient-drift 8s ease-in-out infinite alternate;
+}
+
+/* Legal / static page prose */
+.legal-prose h2 {
+  @apply mt-10 font-display text-xl font-bold text-[var(--foreground)] md:text-2xl;
+}
+.legal-prose h3 {
+  @apply mt-6 font-display text-base font-bold text-[var(--foreground)];
+}
+.legal-prose p {
+  @apply mt-3 text-sm font-light text-[var(--muted-foreground)];
+}
+.legal-prose ul {
+  @apply mt-3 list-disc space-y-2 pl-5 text-sm font-light text-[var(--muted-foreground)];
+}
+.legal-prose a {
+  @apply text-[var(--primary)] hover:underline;
+}
