@@ -3,6 +3,7 @@ export interface VehicleFilters {
   make: string;
   maxPrice: number;
   maxMonthly: number;
+  query: string;
 }
 
 export const DEFAULT_FILTERS: VehicleFilters = {
@@ -10,4 +11,5 @@ export const DEFAULT_FILTERS: VehicleFilters = {
   make: 'All',
   maxPrice: 90000,
   maxMonthly: 10000,
+  query: '',
 };

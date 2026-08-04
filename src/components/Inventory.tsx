@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Link } from 'react-router';
-import { ArrowRight, Filter, SlidersHorizontal } from 'lucide-react';
+import { ArrowRight, Filter, Search, SlidersHorizontal } from 'lucide-react';
 import { inventory, VEHICLE_COUNT, VEHICLE_MAKES, VEHICLE_TYPES } from '../data/inventory';
 import type { VehicleFilters } from '../lib/filters';
 import { cn, formatPrice } from '../lib/utils';
@@ -32,17 +32,17 @@ export function Inventory({ filters, onFiltersChange }: InventoryProps) {
   const [visible, setVisible] = useState(PAGE_SIZE);
   const [sheetOpen, setSheetOpen] = useState(false);
 
-  const filtered = useMemo(
-    () =>
-      inventory.filter(
-        (v) =>
-          (filters.type === 'All' || v.type === filters.type) &&
-          (filters.make === 'All' || v.make === filters.make) &&
-          v.price <= filters.maxPrice &&
-          v.monthly <= filters.maxMonthly,
-      ),
-    [filters],
-  );
+  const filtered = useMemo(() => {
+    const q = filters.query.trim().toLowerCase();
+    return inventory.filter(
+      (v) =>
+        (filters.type === 'All' || v.type === filters.type) &&
+        (filters.make === 'All' || v.make === filters.make) &&
+        v.price <= filters.maxPrice &&
+        v.monthly <= filters.maxMonthly &&
+        (!q || [v.name, v.make, v.type].some((s) => s.toLowerCase().includes(q))),
+    );
+  }, [filters]);
 
   const shown = filtered.slice(0, visible);
   const hasMore = visible < filtered.length;
@@ -52,7 +52,17 @@ export function Inventory({ filters, onFiltersChange }: InventoryProps) {
 
   const filterBar = (
     <>
-      <div className="flex flex-wrap items-center gap-3">
+      <div className="hidden flex-wrap items-center gap-3 lg:flex">
+        <div className="relative w-full max-w-[220px]">
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted-foreground)]" />
+          <input
+            type="text"
+            value={filters.query}
+            onChange={(e) => update({ query: e.target.value })}
+            placeholder="Search cars"
+            className="h-9 w-full rounded-full border border-[var(--border)] bg-[var(--card)] pl-9 pr-4 text-sm text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus:border-[var(--primary)] focus:outline-none"
+          />
+        </div>
         <ChipSelect
           ariaLabel="Type"
           value={filters.type}
@@ -81,20 +91,25 @@ export function Inventory({ filters, onFiltersChange }: InventoryProps) {
         </span>
       </div>
 
-      <div className="mt-4 lg:hidden">
-        <Button
-          variant="ghost"
-          className="w-full justify-between py-3"
+      <div className="flex items-center gap-3 lg:hidden">
+        <div className="relative flex-1">
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted-foreground)]" />
+          <input
+            type="text"
+            value={filters.query}
+            onChange={(e) => update({ query: e.target.value })}
+            placeholder="Search cars"
+            className="h-9 w-full rounded-full border border-[var(--border)] bg-[var(--card)] pl-9 pr-4 text-sm text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus:border-[var(--primary)] focus:outline-none"
+          />
+        </div>
+        <button
+          type="button"
+          aria-label="Filters"
           onClick={() => setSheetOpen(true)}
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--primary)] transition-colors"
         >
-          <span className="flex items-center gap-2">
-            <SlidersHorizontal className="h-4 w-4 text-[var(--primary)]" />
-            Filters
-          </span>
-          <span className="font-display text-sm font-bold tabular-nums text-[var(--primary)]">
-            {formatPrice(filters.maxPrice)}
-          </span>
-        </Button>
+          <SlidersHorizontal className="h-4 w-4" />
+        </button>
       </div>
     </>
   );
@@ -115,7 +130,7 @@ export function Inventory({ filters, onFiltersChange }: InventoryProps) {
         </motion.div>
       </div>
 
-      <div className="sticky top-[76px] z-30 mt-10 border-y border-[var(--border)] bg-[var(--background)]/95 py-4 backdrop-blur">
+      <div className="sticky top-[76px] z-30 mt-10 border-y border-[var(--border)] bg-[var(--background)]/95 py-3 backdrop-blur">
         <div className="container-apex">{filterBar}</div>
       </div>
 

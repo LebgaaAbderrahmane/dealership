@@ -19,12 +19,18 @@ interface HeroProps {
 export function Hero({ filters, onFiltersChange, onSearch }: HeroProps) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [localMake, setLocalMake] = useState(filters.make);
+  const [localQuery, setLocalQuery] = useState(filters.query);
   const [localMonthly, setLocalMonthly] = useState(
     filters.maxMonthly >= 10000 ? 800 : filters.maxMonthly,
   );
 
   const applySearch = () => {
-    onFiltersChange({ ...filters, make: localMake, maxMonthly: localMonthly });
+    onFiltersChange({
+      ...filters,
+      make: localMake,
+      maxMonthly: localMonthly,
+      query: localQuery,
+    });
     onSearch();
     setSearchOpen(false);
   };
@@ -118,6 +124,8 @@ export function Hero({ filters, onFiltersChange, onSearch }: HeroProps) {
             <input
               type="text"
               placeholder="Model"
+              value={localQuery}
+              onChange={(e) => setLocalQuery(e.target.value)}
               className="h-9 w-full rounded-full border border-[var(--border)] bg-[var(--card)] px-4 text-sm text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus:border-[var(--primary)] focus:outline-none"
             />
           </div>
@@ -168,6 +176,8 @@ export function Hero({ filters, onFiltersChange, onSearch }: HeroProps) {
           <input
             type="text"
             placeholder="Model"
+            value={localQuery}
+            onChange={(e) => setLocalQuery(e.target.value)}
             className="h-10 w-full rounded-full border border-[var(--border)] bg-[var(--card)] px-4 text-sm text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus:border-[var(--primary)] focus:outline-none"
           />
           <Slider
