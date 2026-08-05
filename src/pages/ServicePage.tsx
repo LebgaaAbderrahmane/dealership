@@ -6,6 +6,7 @@ import { Field, Input, Select, Textarea } from '../components/ui/field';
 import { Button } from '../components/ui/button';
 import { FormSuccess } from '../components/ui/form-success';
 import { useSubmitLead } from '../hooks/useSubmitLead';
+import { useSiteSettings } from '../lib/settings';
 import { CtaBand } from '../components/ui/CtaBand';
 import { SERVICE_IMAGE } from '../data/inventory';
 
@@ -40,14 +41,10 @@ const SERVICE_TYPES = [
   'Diagnostics (warning light)',
 ];
 
-const HOURS = [
-  { day: 'Monday – Friday', time: '7:00am – 6:00pm' },
-  { day: 'Saturday', time: '8:00am – 4:00pm' },
-  { day: 'Sunday', time: 'Closed' },
-];
-
 export function ServicePage() {
   const { status, error, submit, reset } = useSubmitLead('service');
+  const settings = useSiteSettings();
+  const serviceHourLines = settings.hours.service.split('·').map((s) => s.trim()).filter(Boolean);
 
   return (
     <>
@@ -114,19 +111,18 @@ export function ServicePage() {
                 </h3>
               </div>
               <ul className="mt-5 space-y-3">
-                {HOURS.map((h) => (
-                  <li key={h.day} className="flex items-center justify-between border-b border-[var(--border)] pb-3 text-sm last:border-0 last:pb-0">
-                    <span className="text-[var(--muted-foreground)]">{h.day}</span>
-                    <span className="font-semibold text-[var(--foreground)]">{h.time}</span>
+                {serviceHourLines.map((line) => (
+                  <li key={line} className="flex items-center justify-between border-b border-[var(--border)] pb-3 text-sm last:border-0 last:pb-0">
+                    <span className="text-[var(--muted-foreground)]">{line}</span>
                   </li>
                 ))}
               </ul>
               <a
-                href="tel:+213796269301"
+                href={settings.dealer.phoneHref}
                 className="mt-6 flex items-center gap-2 text-sm font-semibold text-[var(--primary)] hover:underline"
               >
                 <Phone className="h-4 w-4" />
-                +213 796 26 93 01
+                {settings.dealer.phone}
               </a>
             </div>
           </div>

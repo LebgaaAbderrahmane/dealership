@@ -1,5 +1,13 @@
 import { Link } from 'react-router';
-import { Camera, Globe, MapPin, MessageCircle } from 'lucide-react';
+import { Camera, Globe, MapPin, MessageCircle, Play } from 'lucide-react';
+import { useSiteSettings } from '../lib/settings';
+
+const SOCIAL_ICONS: Record<string, typeof Camera> = {
+  instagram: Camera,
+  facebook: Globe,
+  youtube: Play,
+  whatsapp: MessageCircle,
+};
 
 const COLUMNS = [
   {
@@ -35,6 +43,8 @@ const COLUMNS = [
 ];
 
 export function Footer() {
+  const settings = useSiteSettings();
+  const social = Object.entries(settings.social).filter(([, url]) => url.trim() !== '');
   return (
     <footer id="about" className="bg-[hsl(220,16%,5%)] text-[var(--muted-foreground)]">
       <div className="container-apex grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-5">
@@ -51,24 +61,39 @@ export function Footer() {
             </span>
           </Link>
           <p className="mt-5 max-w-xs text-sm font-light">
-            New & certified pre-owned · Bordj El Kiffan, Algiers. Transparent
-            pricing, honest trade-ins, and zero finance-office games.
+            {settings.footer.blurb}
           </p>
           <p className="mt-6 flex items-start gap-2 text-sm">
             <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[var(--primary)]" />
-            Bordj El Kiffan, Algiers, Algeria
+            {settings.dealer.addressLine1}, {settings.dealer.addressLine2}
           </p>
           <div className="mt-6 flex gap-3">
-            {[Camera, MessageCircle, Globe].map((Icon, i) => (
-              <a
-                key={i}
-                href="#top"
-                aria-label="Social link"
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border)] text-[var(--muted-foreground)] transition-colors hover:border-[var(--primary)] hover:text-[var(--primary)]"
-              >
-                <Icon className="h-4 w-4" />
-              </a>
-            ))}
+            {social.length === 0
+              ? [Camera, MessageCircle, Globe].map((Icon, i) => (
+                  <a
+                    key={i}
+                    href="#top"
+                    aria-label="Social link"
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border)] text-[var(--muted-foreground)] transition-colors hover:border-[var(--primary)] hover:text-[var(--primary)]"
+                  >
+                    <Icon className="h-4 w-4" />
+                  </a>
+                ))
+              : social.map(([key, url]) => {
+                  const Icon = SOCIAL_ICONS[key] ?? Globe;
+                  return (
+                    <a
+                      key={key}
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={key}
+                      className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border)] text-[var(--muted-foreground)] transition-colors hover:border-[var(--primary)] hover:text-[var(--primary)]"
+                    >
+                      <Icon className="h-4 w-4" />
+                    </a>
+                  );
+                })}
           </div>
         </div>
 
@@ -95,7 +120,7 @@ export function Footer() {
           <div className="flex flex-col gap-4 text-sm md:flex-row md:items-center md:justify-between">
             <p>
               <span className="font-display font-bold text-[var(--foreground)]">Sales hours:</span>{' '}
-              Mon–Sat 9am–8pm · Sun 11am–6pm
+              {settings.hours.sales}
             </p>
             <p className="text-xs">
               Advertised payments are estimates and exclude tax, title, and dealer
@@ -104,7 +129,7 @@ export function Footer() {
           </div>
           <div className="mt-6 flex flex-col gap-3 border-t border-[var(--border)] pt-6 text-xs md:flex-row md:items-center md:justify-between">
             <p>© 2026 Apex Motors LLC. All rights reserved.</p>
-            <p>Dealer License #DL-0448210</p>
+            <p>Dealer License #{settings.dealer.license}</p>
             <div className="flex gap-6">
               <Link to="/privacy" className="hover:text-[var(--foreground)]">
                 Privacy Policy

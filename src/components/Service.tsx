@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { Link } from 'react-router';
 import { ArrowRight, Gauge, Package, Wrench } from 'lucide-react';
+import { useSiteSettings } from '../lib/settings';
 
 const SERVICES = [
   {
@@ -21,6 +22,7 @@ const SERVICES = [
 ];
 
 export function Service() {
+  const settings = useSiteSettings();
   return (
     <section id="service" className="bg-[var(--background)] py-16 md:py-24">
       <div className="container-apex">
@@ -76,7 +78,7 @@ export function Service() {
         >
           <p className="text-sm font-light text-[var(--muted-foreground)]">
             <span className="font-display font-bold text-[var(--foreground)]">Service hours:</span>{' '}
-            Mon–Fri 7am–6pm · Sat 8am–4pm · Sun closed
+            {settings.hours.service}
           </p>
           <Link to="/service" className="text-sm font-semibold text-[var(--primary)] hover:underline">
             Book an appointment

@@ -5,39 +5,41 @@ import { Field, Input, Select, Textarea } from '../components/ui/field';
 import { Button } from '../components/ui/button';
 import { FormSuccess } from '../components/ui/form-success';
 import { useSubmitLead } from '../hooks/useSubmitLead';
+import { useSiteSettings } from '../lib/settings';
 import { CONTACT_IMAGE } from '../data/inventory';
-
-const CARDS = [
-  {
-    icon: Phone,
-    title: 'Call or text',
-    lines: ['+213 796 26 93 01', '7 days a week'],
-    href: 'tel:+213796269301',
-  },
-  {
-    icon: Mail,
-    title: 'Email',
-    lines: ['sales@apexmotors.dz', 'service@apexmotors.dz'],
-    href: 'mailto:sales@apexmotors.dz',
-  },
-  {
-    icon: MapPin,
-    title: 'Visit us',
-    lines: ['Bordj El Kiffan', 'Algiers, Algeria'],
-    href: 'https://maps.google.com/?q=Bordj+El+Kiffan,+Algiers,+Algeria',
-  },
-  {
-    icon: Clock,
-    title: 'Sales hours',
-    lines: ['Mon–Sat 9am–8pm', 'Sun 11am–6pm'],
-    href: undefined,
-  },
-];
 
 const SUBJECTS = ['General question', 'Test drive request', 'Service appointment', 'Trade-in inquiry', 'Financing help'];
 
 export function ContactPage() {
   const { status, error, submit, reset } = useSubmitLead('contact');
+  const settings = useSiteSettings();
+
+  const cards = [
+    {
+      icon: Phone,
+      title: 'Call or text',
+      lines: [settings.dealer.phone, '7 days a week'],
+      href: settings.dealer.phoneHref,
+    },
+    {
+      icon: Mail,
+      title: 'Email',
+      lines: [settings.dealer.salesEmail, settings.dealer.serviceEmail],
+      href: `mailto:${settings.dealer.salesEmail}`,
+    },
+    {
+      icon: MapPin,
+      title: 'Visit us',
+      lines: [settings.dealer.addressLine1, settings.dealer.addressLine2],
+      href: `https://maps.google.com/?q=${encodeURIComponent(`${settings.dealer.addressLine1}, ${settings.dealer.addressLine2}`)}`,
+    },
+    {
+      icon: Clock,
+      title: 'Sales hours',
+      lines: settings.hours.sales.split('·').map((s) => s.trim()),
+      href: undefined,
+    },
+  ];
 
   return (
     <>
@@ -52,8 +54,7 @@ export function ContactPage() {
       <section className="bg-[var(--background)] py-16 md:py-24">
         <div className="container-apex">
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {CARDS.map((card, i) => (
-              <motion.div
+            {cards.map((card, i) => (              <motion.div
                 key={card.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -124,7 +125,7 @@ export function ContactPage() {
             {status === 'success' ? (
               <FormSuccess
                 title="Message sent"
-                message="Thanks — a specialist will reply within the hour during business hours. Need us sooner? Call +213 796 26 93 01."
+                message={`Thanks — a specialist will reply within the hour during business hours. Need us sooner? Call ${settings.dealer.phone}.`}
                 onReset={reset}
               />
             ) : (

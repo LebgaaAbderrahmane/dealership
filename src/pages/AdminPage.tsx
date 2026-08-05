@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
 import { toast } from 'sonner';
-import { Pencil, Plus, Trash2 } from 'lucide-react';
+import { Car, Inbox, LayoutDashboard, Pencil, Plus, Settings, Trash2 } from 'lucide-react';
 import { adminToken, useAuth } from '@/lib/auth';
 import { apiFetch } from '@/lib/api';
 import type { Vehicle } from '@/types/vehicle';
@@ -18,9 +18,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/shadcn/dialog';
-import { formatNumber } from '@/lib/utils';
+import { cn, formatNumber } from '@/lib/utils';
+import { DashboardTab, type AdminTab } from '@/components/admin/DashboardTab';
+import { SettingsTab } from '@/components/admin/SettingsTab';
 
-type Tab = 'vehicles' | 'leads';
+type Tab = AdminTab;
 
 interface Lead {
   id: number;
@@ -607,46 +609,91 @@ function LeadsTab() {
   );
 }
 
+const NAV_ITEMS: { id: Tab; label: string; icon: typeof LayoutDashboard }[] = [
+  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { id: 'vehicles', label: 'Vehicles', icon: Car },
+  { id: 'leads', label: 'Leads', icon: Inbox },
+  { id: 'settings', label: 'Settings', icon: Settings },
+];
+
+function SidebarNav({ tab, onNavigate }: { tab: Tab; onNavigate: (tab: Tab) => void }) {
+  return (
+    <nav className="flex flex-1 flex-col gap-1 p-3">
+      {NAV_ITEMS.map(({ id, label, icon: Icon }) => (
+        <button
+          key={id}
+          onClick={() => onNavigate(id)}
+          className={cn(
+            'flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors',
+            tab === id ? 'bg-primary text-primary-foreground font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+          )}
+        >
+          <Icon className="h-4 w-4" />
+          {label}
+        </button>
+      ))}
+    </nav>
+  );
+}
+
 export function AdminPage() {
   const { admin, logout } = useAuth();
-  const [tab, setTab] = useState<Tab>('vehicles');
+  const [tab, setTab] = useState<Tab>('dashboard');
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-6">
-            <h1 className="text-lg font-bold tracking-tight">Apex Admin</h1>
-            <nav className="flex gap-1">
-              <button
-                onClick={() => setTab('vehicles')}
-                className={`rounded-md px-3 py-1.5 text-sm transition-colors ${
-                  tab === 'vehicles' ? 'bg-muted font-medium' : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                Vehicles
-              </button>
-              <button
-                onClick={() => setTab('leads')}
-                className={`rounded-md px-3 py-1.5 text-sm transition-colors ${
-                  tab === 'leads' ? 'bg-muted font-medium' : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                Leads
-              </button>
-            </nav>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-sm text-muted-foreground">{admin?.username}</span>
-            <Button variant="outline" size="sm" onClick={logout}>
-              Sign out
-            </Button>
-          </div>
+    <div className="flex min-h-screen bg-background">
+      <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col border-r bg-muted/30 md:flex">
+        <div className="flex h-14 items-center gap-2.5 border-b px-5">
+          <img src="/logo.svg" alt="Apex Motors" className="h-7 w-auto" />
+          <span className="font-display text-base font-bold tracking-tight">Apex Admin</span>
         </div>
-      </header>
-      <main className="mx-auto max-w-6xl px-6 py-8">
-        {tab === 'vehicles' ? <VehiclesTab /> : <LeadsTab />}
-      </main>
+        <SidebarNav tab={tab} onNavigate={setTab} />
+        <div className="space-y-2 border-t p-3">
+          <p className="px-3 text-xs text-muted-foreground">Signed in as {admin?.username}</p>
+          <Button variant="outline" size="sm" className="w-full" onClick={logout}>
+            Sign out
+          </Button>
+        </div>
+      </aside>
+
+      <div className="flex min-w-0 flex-1 flex-col">
+        <header className="sticky top-0 z-10 border-b bg-background/90 backdrop-blur">
+          <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
+            <div className="flex items-center gap-2.5 md:hidden">
+              <img src="/logo.svg" alt="Apex Motors" className="h-6 w-auto" />
+              <span className="font-display text-sm font-bold tracking-tight">Apex Admin</span>
+            </div>
+            <div className="hidden items-center gap-3 md:flex">
+              <span className="text-sm text-muted-foreground">{admin?.username}</span>
+              <Button variant="outline" size="sm" onClick={logout}>
+                Sign out
+              </Button>
+            </div>
+          </div>
+          <nav className="flex gap-1 overflow-x-auto px-4 pb-2 md:hidden">
+            {NAV_ITEMS.map(({ id, label, icon: Icon }) => (
+              <button
+                key={id}
+                onClick={() => setTab(id)}
+                className={cn(
+                  'flex shrink-0 items-center gap-1.5 rounded-md px-3 py-1.5 text-sm transition-colors',
+                  tab === id ? 'bg-muted font-medium text-foreground' : 'text-muted-foreground hover:text-foreground',
+                )}
+              >
+                <Icon className="h-4 w-4" />
+                {label}
+              </button>
+            ))}
+          </nav>
+        </header>
+
+        <main className="mx-auto w-full max-w-6xl px-6 py-8">
+          {tab === 'dashboard' && <DashboardTab onNavigate={setTab} />}
+          {tab === 'vehicles' && <VehiclesTab />}
+          {tab === 'leads' && <LeadsTab />}
+          {tab === 'settings' && <SettingsTab />}
+        </main>
+      </div>
     </div>
   );
 }

@@ -1,22 +1,17 @@
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import { HERO_IMAGE } from '../data/inventory';
+import { useSiteSettings } from '../lib/settings';
 import { Button } from './ui/button';
 
 const HERO_LINES = ['Find it. Finance it.', 'Drive it home', 'today.'];
-
-const STATS = [
-  { value: '340+', label: 'Vehicles in stock' },
-  { value: '12', label: 'Premium makes' },
-  { value: '172', label: 'Point inspection' },
-  { value: '4.8★', label: 'Buyer rating' },
-];
 
 interface HeroProps {
   onSearch: () => void;
 }
 
 export function Hero({ onSearch }: HeroProps) {
+  const settings = useSiteSettings();
   return (
     <section id="top" className="relative flex min-h-screen items-center overflow-hidden bg-[var(--background)]">
       <img
@@ -39,7 +34,7 @@ export function Hero({ onSearch }: HeroProps) {
           transition={{ duration: 0.75, delay: 0.1 }}
           className="eyebrow mb-6"
         >
-          Bordj El Kiffan, Algiers · 340 vehicles in stock · Open 7 days
+          {settings.hero.eyebrow}
         </motion.p>
 
         <h1 className="max-w-3xl font-display font-extrabold leading-none tracking-[-0.035em] text-[var(--foreground)] [font-size:clamp(40px,5.6vw,88px)]">
@@ -62,8 +57,7 @@ export function Hero({ onSearch }: HeroProps) {
           transition={{ duration: 0.75, delay: 0.45 }}
           className="mt-6 max-w-xl text-base font-light text-[color-mix(in_srgb,var(--foreground)_80%,transparent)] md:text-lg"
         >
-          New and certified pre-owned across twelve makes, with transparent pricing
-          and no four-hour finance office marathon.
+          {settings.hero.subline}
         </motion.p>
 
         <motion.div
@@ -88,7 +82,7 @@ export function Hero({ onSearch }: HeroProps) {
           className="mt-14 w-full"
         >
           <dl className="grid w-full grid-cols-2 gap-y-8 rounded-2xl border border-[var(--border)] bg-white/[0.04] px-6 py-8 backdrop-blur-xl sm:grid-cols-4 lg:px-10">
-            {STATS.map((s) => (
+            {settings.hero.stats.map((s) => (
               <div key={s.label} className="text-center">
                 <dd className="font-display text-3xl font-extrabold tracking-tight text-[var(--foreground)] md:text-[40px] md:leading-none">
                   {s.value}
