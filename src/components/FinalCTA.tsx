@@ -45,11 +45,11 @@ export function FinalCTA() {
             <ArrowRight className="h-4 w-4" />
           </Button>
           <a
-            href="tel:3055550190"
+            href="tel:+213796269301"
             className="flex items-center gap-2 font-display text-xl font-bold text-white"
           >
             <Phone className="h-5 w-5" />
-            (305) 555-0190
+            +213 796 26 93 01
           </a>
         </motion.div>
       </div>

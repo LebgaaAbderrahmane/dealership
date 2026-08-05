@@ -39,7 +39,7 @@ export function Hero({ onSearch }: HeroProps) {
           transition={{ duration: 0.75, delay: 0.1 }}
           className="eyebrow mb-6"
         >
-          Miami, FL · 340 vehicles in stock · Open 7 days
+          Bordj El Kiffan, Algiers · 340 vehicles in stock · Open 7 days
         </motion.p>
 
         <h1 className="max-w-3xl font-display font-extrabold leading-none tracking-[-0.035em] text-[var(--foreground)] [font-size:clamp(40px,5.6vw,88px)]">

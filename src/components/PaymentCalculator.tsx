@@ -138,7 +138,7 @@ export function PaymentCalculator() {
               transition={{ duration: 0.25 }}
               className="font-display text-5xl font-extrabold tabular-nums text-[var(--primary)] md:text-6xl"
             >
-              ${monthly}
+              {formatPrice(monthly)}
             </motion.div>
             <p className="mt-2 text-sm text-[var(--muted-foreground)]">
               {term} months at {(APR * 100).toFixed(1)}% APR · Estimate only, subject
@@ -161,7 +161,7 @@ export function PaymentCalculator() {
               transition={{ duration: 0.25 }}
               className="font-display text-3xl font-extrabold tabular-nums text-[var(--primary)]"
             >
-              ${monthly}
+              {formatPrice(monthly)}
             </motion.div>
           </div>
           <p className="max-w-[10rem] text-right text-xs text-[var(--muted-foreground)]">

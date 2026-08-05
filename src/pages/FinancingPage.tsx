@@ -16,7 +16,7 @@ const LENDERS = [
   'Sunshine Bank',
   'Coral Gables Trust',
   'Marina Bay Credit',
-  'Biscayne Community FCU',
+  'El Kiffan Credit Union',
   'Palm Financial',
   'National Auto Capital',
   'EverBank Direct',
@@ -51,7 +51,7 @@ const FAQS = [
   },
   {
     q: 'What is the minimum down payment?',
-    a: 'There is no minimum, but a $5,000 down payment is used in the calculator above. More down lowers your payment and can unlock a better rate.',
+    a: 'There is no minimum, but a 1,250,000 DA down payment is used in the calculator above. More down lowers your payment and can unlock a better rate.',
   },
 ];
 
@@ -97,8 +97,9 @@ export function FinancingPage() {
             ))}
           </div>
           <p className="mt-4 text-xs text-[var(--muted-foreground)]">
-            Example: 60-month term on a $42,000 vehicle with $5,000 down at 6.9% APR is
-            approximately $731/month. Your approved rate may differ.
+            Example: 60-month term on a 10,500,000 DA vehicle with 1,250,000 DA
+            down at 6.9% APR is approximately 182,750 DA/month. Your approved rate
+            may differ.
           </p>
         </div>
       </section>
@@ -184,7 +185,7 @@ export function FinancingPage() {
                     <Input required type="email" placeholder="jordan@email.com" />
                   </Field>
                   <Field label="Phone">
-                    <Input required type="tel" placeholder="(305) 555-0000" />
+                    <Input required type="tel" placeholder="+213 7 00 00 00 00" />
                   </Field>
                 </div>
                 <Field label="Estimated monthly income">

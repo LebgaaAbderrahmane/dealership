@@ -10,20 +10,20 @@ const CARDS = [
   {
     icon: Phone,
     title: 'Call or text',
-    lines: ['(305) 555-0190', '7 days a week'],
-    href: 'tel:3055550190',
+    lines: ['+213 796 26 93 01', '7 days a week'],
+    href: 'tel:+213796269301',
   },
   {
     icon: Mail,
     title: 'Email',
-    lines: ['sales@apexmotors.miami', 'service@apexmotors.miami'],
-    href: 'mailto:sales@apexmotors.miami',
+    lines: ['sales@apexmotors.dz', 'service@apexmotors.dz'],
+    href: 'mailto:sales@apexmotors.dz',
   },
   {
     icon: MapPin,
     title: 'Visit us',
-    lines: ['8800 Biscayne Boulevard', 'Miami, FL 33138'],
-    href: 'https://maps.google.com/?q=8800+Biscayne+Blvd,+Miami,+FL',
+    lines: ['Bordj El Kiffan', 'Algiers, Algeria'],
+    href: 'https://maps.google.com/?q=Bordj+El+Kiffan,+Algiers,+Algeria',
   },
   {
     icon: Clock,
@@ -69,7 +69,7 @@ export function ContactPage() {
                     <a key={line} href={`mailto:${line}`} className="block text-sm text-[var(--muted-foreground)] hover:text-[var(--primary)]">
                       {line}
                     </a>
-                  ) : card.href && line.startsWith('(305)') ? (
+                  ) : card.href && line.startsWith('+213') ? (
                     <a key={line} href={card.href} className="block text-sm text-[var(--muted-foreground)] hover:text-[var(--primary)]">
                       {line}
                     </a>
@@ -104,7 +104,7 @@ export function ContactPage() {
             <div className="mt-8 overflow-hidden rounded-2xl border border-[var(--border)]">
               <iframe
                 title="Apex Motors location map"
-                src="https://maps.google.com/maps?q=8800%20Biscayne%20Blvd%2C%20Miami%2C%20FL%2033138&z=14&output=embed"
+                src="https://maps.google.com/maps?q=Bordj%20El%20Kiffan%2C%20Algiers%2C%20Algeria&z=14&output=embed"
                 className="h-[320px] w-full border-0 grayscale-[0.3]"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
@@ -121,7 +121,7 @@ export function ContactPage() {
             {status === 'success' ? (
               <FormSuccess
                 title="Message sent"
-                message="Thanks — a specialist will reply within the hour during business hours. Need us sooner? Call (305) 555-0190."
+                message="Thanks — a specialist will reply within the hour during business hours. Need us sooner? Call +213 796 26 93 01."
                 onReset={reset}
               />
             ) : (
@@ -131,7 +131,7 @@ export function ContactPage() {
                     <Input required placeholder="Jordan Mercer" />
                   </Field>
                   <Field label="Phone or email">
-                    <Input required placeholder="(305) 555-0000" />
+                    <Input required placeholder="+213 7 00 00 00 00" />
                   </Field>
                 </div>
                 <div className="mt-5">

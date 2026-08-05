@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import { Link } from 'react-router';
 import type { Vehicle } from '../data/inventory';
-import { formatNumber, formatPrice } from '../lib/utils';
+import { formatDistance, formatPrice } from '../lib/utils';
 
 interface VehicleCardProps {
   vehicle: Vehicle;
@@ -41,7 +41,7 @@ export function VehicleCard({ vehicle }: VehicleCardProps) {
             </h3>
           </div>
           <div className="mt-1 text-sm text-[var(--muted-foreground)]">
-            {formatNumber(vehicle.miles)} mi · {vehicle.drivetrain} · {vehicle.badge}
+            {formatDistance(vehicle.miles)} · {vehicle.drivetrain} · {vehicle.badge}
           </div>
           <div className="mt-4 flex items-end justify-between">
             <span className="font-display text-2xl font-bold tabular-nums text-[var(--foreground)]">

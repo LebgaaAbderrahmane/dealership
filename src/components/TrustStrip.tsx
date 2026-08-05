@@ -20,7 +20,7 @@ const ITEMS = [
   {
     icon: Star,
     label: '4.8★ from 2,100+ reviews',
-    sub: 'Rated by real buyers in Miami.',
+    sub: 'Rated by real buyers in Algiers.',
   },
 ];
 

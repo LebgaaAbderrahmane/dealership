@@ -119,11 +119,11 @@ export function ServicePage() {
                 ))}
               </ul>
               <a
-                href="tel:3055550190"
+                href="tel:+213796269301"
                 className="mt-6 flex items-center gap-2 text-sm font-semibold text-[var(--primary)] hover:underline"
               >
                 <Phone className="h-4 w-4" />
-                (305) 555-0190
+                +213 796 26 93 01
               </a>
             </div>
           </div>
@@ -147,7 +147,7 @@ export function ServicePage() {
                     <Input required placeholder="Jordan Mercer" />
                   </Field>
                   <Field label="Phone">
-                    <Input required type="tel" placeholder="(305) 555-0000" />
+                    <Input required type="tel" placeholder="+213 7 00 00 00 00" />
                   </Field>
                   <Field label="Vehicle year">
                     <Input required type="number" placeholder="2021" />

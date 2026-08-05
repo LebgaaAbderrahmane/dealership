@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { BadgeDollarSign, RotateCcw } from 'lucide-react';
 import { Field, Input, Select } from '../ui/field';
 import { Button } from '../ui/button';
-import { formatPrice } from '../../lib/utils';
+import { formatDistance, formatPrice } from '../../lib/utils';
 
 interface OfferInputs {
   year: string;
@@ -37,7 +37,8 @@ const INITIAL: OfferInputs = {
 function estimateOffer(inputs: OfferInputs): number {
   const base = MAKE_BASE[inputs.make] ?? 24000;
   const year = Number(inputs.year) || 2021;
-  const miles = Number(inputs.mileage) || 30000;
+  const km = Number(inputs.mileage) || 48000;
+  const miles = km / 1.609344;
   const age = 2026 - year;
   const ageFactor = Math.max(0.45, 1 - age * 0.06);
   const milesFactor = Math.max(0.55, 1 - miles / 120000);
@@ -79,8 +80,8 @@ export function TradeInOfferForm() {
         </p>
         <p className="mt-4 text-sm font-light text-[var(--muted-foreground)]">
           For the {inputs.year || '—'} {inputs.make} {inputs.model} ({inputs.condition},{' '}
-          {Number(inputs.mileage).toLocaleString() || '—'} mi). Bring it in and we'll
-          verify in about fifteen minutes.
+          {inputs.mileage ? formatDistance(Number(inputs.mileage)) : '—'}). Bring it
+          in and we'll verify in about fifteen minutes.
         </p>
         <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Button onClick={() => setOffer(null)}>
@@ -88,7 +89,7 @@ export function TradeInOfferForm() {
             Adjust details
           </Button>
           <p className="text-xs text-[var(--muted-foreground)]">
-            Offers good for 7 days and 500 miles.
+            Offers good for 7 days and 800 km.
           </p>
         </div>
       </motion.div>
@@ -120,7 +121,7 @@ export function TradeInOfferForm() {
           <Input placeholder="Touring" value={inputs.trim} onChange={(e) => set('trim', e.target.value)} />
         </Field>
         <Field label="Mileage">
-          <Input required type="number" placeholder="45000" value={inputs.mileage} onChange={(e) => set('mileage', e.target.value)} />
+          <Input required type="number" placeholder="72000" value={inputs.mileage} onChange={(e) => set('mileage', e.target.value)} />
         </Field>
         <Field label="Condition">
           <Select value={inputs.condition} onChange={(e) => set('condition', e.target.value)}>

@@ -5,7 +5,7 @@ import { ABOUT_IMAGE } from '../data/inventory';
 import { CtaBand } from '../components/ui/CtaBand';
 
 const STATS = [
-  { value: '2014', label: 'Serving Miami since' },
+  { value: '2014', label: 'Serving Algiers since' },
   { value: '340+', label: 'Vehicles on the lot' },
   { value: '4.8★', label: 'From 2,100+ reviews' },
   { value: '22', label: 'Lender partners' },
@@ -69,11 +69,11 @@ export function AboutPage() {
           >
             <p className="eyebrow mb-3">Our story</p>
             <h2 className="font-display text-3xl font-bold tracking-[-0.025em] text-[var(--foreground)] md:text-[40px] md:leading-none">
-              From One Lot on Biscayne to 340 Vehicles
+              From One Lot in Bordj El Kiffan to 340 Vehicles
             </h2>
             <div className="mt-6 space-y-4 font-light text-[var(--muted-foreground)]">
               <p>
-                Apex Motors started as a twelve-car corner lot at 88th and Biscayne.
+                Apex Motors started as a twelve-car corner lot in Bordj El Kiffan.
                 We sold on one promise — the price on the windshield is the price you
                 pay — and built the business one referral at a time.
               </p>
@@ -182,7 +182,7 @@ export function AboutPage() {
       </section>
 
       <CtaBand
-        title="Come meet us on Biscayne."
+        title="Come meet us in Bordj El Kiffan."
         subline="Stop by for a coffee and a test drive — no pressure, no appointment needed. Open seven days a week."
       />
     </>

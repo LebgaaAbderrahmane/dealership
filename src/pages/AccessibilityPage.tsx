@@ -32,9 +32,9 @@ export function AccessibilityPage() {
       <h2>Contact Us</h2>
       <p>
         If you encounter any accessibility barrier, please tell us. Call{' '}
-        <a href="tel:3055550190">(305) 555-0190</a>, email{' '}
-        <a href="mailto:accessibility@apexmotors.miami">accessibility@apexmotors.miami</a>,
-        or visit us at 8800 Biscayne Boulevard, Miami, FL 33138. We will respond
+        <a href="tel:+213796269301">+213 796 26 93 01</a>, email{' '}
+        <a href="mailto:accessibility@apexmotors.dz">accessibility@apexmotors.dz</a>,
+        or visit us at Bordj El Kiffan, Algiers, Algeria. We will respond
         within two business days and will make every reasonable effort to resolve the
         issue promptly.
       </p>

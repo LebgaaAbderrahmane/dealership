@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router';
 import { motion } from 'motion/react';
 import { BadgeCheck, CalendarCheck, ChevronRight, Gauge, KeyRound, ShieldCheck, Zap } from 'lucide-react';
 import { getVehicleById, similarVehicles } from '../data/inventory';
-import { formatNumber, formatPrice } from '../lib/utils';
+import { formatDistance, formatPrice } from '../lib/utils';
 import { Button } from '../components/ui/button';
 import { VehicleCard } from '../components/VehicleCard';
 import { PaymentCalculator } from '../components/PaymentCalculator';
@@ -118,7 +118,7 @@ export function VehicleDetailPage() {
                 {vehicle.year} {vehicle.name}
               </h1>
               <p className="mt-2 text-sm text-[var(--muted-foreground)]">
-                {formatNumber(vehicle.miles)} mi · {vehicle.drivetrain} · {vehicle.fuel}
+                {formatDistance(vehicle.miles)} · {vehicle.drivetrain} · {vehicle.fuel}
               </p>
 
               <div className="mt-5 flex items-end justify-between gap-4">
@@ -135,7 +135,7 @@ export function VehicleDetailPage() {
               </p>
 
               <div className="mt-6 rounded-xl border border-[var(--border)] bg-[var(--card)] px-5 py-2">
-                <SpecRow label="Mileage" value={`${formatNumber(vehicle.miles)} mi`} />
+                <SpecRow label="Mileage" value={formatDistance(vehicle.miles)} />
                 <SpecRow label="Drivetrain" value={vehicle.drivetrain} />
                 <SpecRow label="Transmission" value={vehicle.transmission} />
                 <SpecRow label="Fuel" value={vehicle.fuel} />
@@ -221,8 +221,8 @@ export function VehicleDetailPage() {
               <Gauge className="mt-0.5 h-5 w-5 shrink-0 text-[var(--primary)]" />
               <span>
                 Advertised payment is an estimate based on {formatPrice(vehicle.price)}{' '}
-                at 6.9% APR for 60 months with a $5,000 down payment. Excludes tax,
-                title, and dealer fees. Subject to credit approval.
+                at 6.9% APR for 60 months with a 1,250,000 DA down payment. Excludes
+                tax, title, and dealer fees. Subject to credit approval.
               </span>
             </div>
           </motion.div>

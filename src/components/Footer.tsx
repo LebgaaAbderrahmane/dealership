@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import { Camera, ChevronRight, Globe, MapPin, MessageCircle } from 'lucide-react';
+import { Camera, Globe, MapPin, MessageCircle } from 'lucide-react';
 
 const COLUMNS = [
   {
@@ -40,9 +40,7 @@ export function Footer() {
       <div className="container-apex grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-5">
         <div className="lg:col-span-2">
           <Link to="/" className="flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-[color-mix(in_srgb,var(--primary)_40%,transparent)] bg-[color-mix(in_srgb,var(--primary)_12%,transparent)]">
-              <ChevronRight className="h-5 w-5 text-[var(--primary)]" />
-            </span>
+            <img src="/logo.svg" alt="Apex Motors logo" className="h-9 w-auto" />
             <span className="flex flex-col leading-none">
               <span className="font-display text-xl font-extrabold tracking-tight text-[var(--foreground)]">
                 APEX
@@ -53,12 +51,12 @@ export function Footer() {
             </span>
           </Link>
           <p className="mt-5 max-w-xs text-sm font-light">
-            New & certified pre-owned · Miami, Florida. Transparent pricing, honest
-            trade-ins, and zero finance-office games.
+            New & certified pre-owned · Bordj El Kiffan, Algiers. Transparent
+            pricing, honest trade-ins, and zero finance-office games.
           </p>
           <p className="mt-6 flex items-start gap-2 text-sm">
             <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[var(--primary)]" />
-            8800 Biscayne Boulevard, Miami, FL 33138
+            Bordj El Kiffan, Algiers, Algeria
           </p>
           <div className="mt-6 flex gap-3">
             {[Camera, MessageCircle, Globe].map((Icon, i) => (

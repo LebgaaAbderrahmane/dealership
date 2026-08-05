@@ -127,7 +127,7 @@ export function TradeIn() {
           </form>
 
           <p className="mt-4 text-xs text-[var(--muted-foreground)]">
-            Offers are good for 7 days and 500 miles, whether or not you buy from us.
+            Offers are good for 7 days and 800 km, whether or not you buy from us.
           </p>
         </div>
       </div>

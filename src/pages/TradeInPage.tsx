@@ -64,7 +64,7 @@ export function TradeInPage() {
               <span className="font-display font-bold text-[var(--foreground)]">
                 The fine print, upfront:
               </span>{' '}
-              Offers are good for 7 days and 500 miles, whether or not you buy from
+              Offers are good for 7 days and 800 km, whether or not you buy from
               us. We inspect for the condition you selected — no surprises after the
               fact.
             </div>

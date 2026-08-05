@@ -16,9 +16,7 @@ const NAV_LINKS = [
 function Wordmark() {
   return (
     <span className="flex items-center gap-2.5">
-      <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-[color-mix(in_srgb,var(--primary)_40%,transparent)] bg-[color-mix(in_srgb,var(--primary)_12%,transparent)]">
-        <ChevronRight className="h-5 w-5 text-[var(--primary)] transition-transform duration-300 group-hover:translate-x-0.5" />
-      </span>
+      <img src="/logo.svg" alt="Apex Motors logo" className="h-9 w-auto" />
       <span className="flex flex-col leading-none">
         <span className="font-display text-xl font-extrabold tracking-tight text-[var(--foreground)]">
           APEX
@@ -93,11 +91,11 @@ export function Navbar() {
 
           <div className="hidden items-center gap-6 lg:flex">
             <a
-              href="tel:3055550190"
+              href="tel:+213796269301"
               className="flex items-center gap-2 text-sm font-semibold text-[var(--foreground)] transition-colors hover:text-[var(--primary)]"
             >
               <Phone className="h-4 w-4 text-[var(--primary)]" />
-              (305) 555-0190
+              +213 796 26 93 01
             </a>
             <Button onClick={() => navigate('/inventory')} size="sm">
               Browse Inventory
@@ -124,8 +122,11 @@ export function Navbar() {
             className="fixed inset-0 z-50 flex flex-col bg-[var(--background)]/98 backdrop-blur-md"
           >
             <div className="flex h-[76px] items-center justify-between border-b px-6">
-              <span className="font-display text-xl font-extrabold tracking-tight text-[var(--foreground)]">
-                APEX <span className="text-[var(--primary)]">MOTORS</span>
+              <span className="flex items-center gap-2.5">
+                <img src="/logo.svg" alt="Apex Motors logo" className="h-8 w-auto" />
+                <span className="font-display text-xl font-extrabold tracking-tight text-[var(--foreground)]">
+                  APEX <span className="text-[var(--primary)]">MOTORS</span>
+                </span>
               </span>
               <button
                 onClick={() => setMenuOpen(false)}
@@ -161,11 +162,11 @@ export function Navbar() {
             </nav>
             <div className="space-y-3 px-6 pb-10">
               <a
-                href="tel:3055550190"
+                href="tel:+213796269301"
                 className="flex items-center justify-center gap-2 rounded-full border border-[var(--border)] py-4 font-semibold text-[var(--foreground)]"
               >
                 <Phone className="h-4 w-4 text-[var(--primary)]" />
-                Tap to call (305) 555-0190
+                Tap to call +213 796 26 93 01
               </a>
               <Button
                 className="w-full py-4"

@@ -61,8 +61,8 @@ export function PrivacyPage() {
       <h2>Contact</h2>
       <p>
         Questions about this policy? Email{' '}
-        <a href="mailto:privacy@apexmotors.miami">privacy@apexmotors.miami</a> or
-        write to Apex Motors, 8800 Biscayne Boulevard, Miami, FL 33138.
+        <a href="mailto:privacy@apexmotors.dz">privacy@apexmotors.dz</a> or
+        write to Apex Motors, Bordj El Kiffan, Algiers, Algeria.
       </p>
     </LegalDoc>
   );
