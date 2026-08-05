@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Link, NavLink, useNavigate } from 'react-router';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router';
 import { ChevronRight, Menu, X } from 'lucide-react';
 import { Button } from './ui/button';
 import { cn } from '../lib/utils';
@@ -34,6 +34,9 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const navRef = useRef<HTMLElement>(null);
+  const [underline, setUnderline] = useState({ left: 0, width: 0, top: 0, opacity: 0 });
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -49,6 +52,28 @@ export function Navbar() {
     };
   }, [menuOpen]);
 
+  useLayoutEffect(() => {
+    const measure = () => {
+      const nav = navRef.current;
+      if (!nav) return;
+      const active = nav.querySelector('a[aria-current="page"]');
+      if (!active) {
+        setUnderline((u) => ({ ...u, opacity: 0 }));
+        return;
+      }
+      setUnderline({
+        left: (active as HTMLElement).offsetLeft,
+        width: (active as HTMLElement).offsetWidth,
+        top: (active as HTMLElement).offsetTop + (active as HTMLElement).offsetHeight + 6,
+        opacity: 1,
+      });
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    document.fonts?.ready.then(measure);
+    return () => window.removeEventListener('resize', measure);
+  }, [pathname]);
+
   return (
     <>
       <header
@@ -63,7 +88,7 @@ export function Navbar() {
             <Wordmark />
           </Link>
 
-          <nav className="hidden items-center gap-8 lg:flex">
+          <nav ref={navRef} className="relative hidden items-center gap-8 lg:flex">
             {NAV_LINKS.map((link) => (
               <NavLink
                 key={link.to}
@@ -75,19 +100,20 @@ export function Navbar() {
                   )
                 }
               >
-                {({ isActive }) => (
-                  <>
-                    {link.label}
-                    {isActive && (
-                      <motion.span
-                        layoutId="nav-underline"
-                        className="absolute -bottom-1.5 left-0 right-0 h-0.5 rounded-full bg-[var(--primary)]"
-                      />
-                    )}
-                  </>
-                )}
+                {link.label}
               </NavLink>
             ))}
+            <motion.span
+              className="absolute h-0.5 rounded-full bg-[var(--primary)]"
+              initial={false}
+              animate={{
+                left: underline.left,
+                width: underline.width,
+                top: underline.top,
+                opacity: underline.opacity,
+              }}
+              transition={{ type: 'spring', stiffness: 400, damping: 32 }}
+            />
           </nav>
 
           <div className="hidden items-center gap-6 lg:flex">
