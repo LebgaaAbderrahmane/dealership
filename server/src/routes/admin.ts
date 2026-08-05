@@ -1,8 +1,28 @@
 import { Router } from 'express';
 import type { ResultSetHeader } from 'mysql2';
+import { randomUUID } from 'node:crypto';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import multer from 'multer';
 import { z } from 'zod';
 import { pool, query } from '../db';
 import { requireAuth } from '../middleware/auth';
+
+const uploadsDir = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..', 'uploads');
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: (_req, _file, cb) => cb(null, uploadsDir),
+    filename: (_req, file, cb) => {
+      const ext = path.extname(file.originalname).toLowerCase() || '.jpg';
+      cb(null, `${randomUUID()}${ext}`);
+    },
+  }),
+  limits: { fileSize: 8 * 1024 * 1024 },
+  fileFilter: (_req, file, cb) => {
+    const allowed = /^image\/(png|jpe?g|webp|gif|avif|svg\+xml)$/;
+    cb(null, allowed.test(file.mimetype));
+  },
+});
 
 const vehicleSchema = z.object({
   year: z.coerce.number().int().min(1950).max(2100),
@@ -31,6 +51,14 @@ const leadStatusSchema = z.object({
 
 export const adminRouter = Router();
 adminRouter.use(requireAuth);
+
+adminRouter.post('/upload', upload.single('image'), (req, res) => {
+  if (!req.file) {
+    res.status(400).json({ error: 'Upload a valid image file (png, jpg, webp, gif, avif, svg)' });
+    return;
+  }
+  res.status(201).json({ url: `/uploads/${req.file.filename}` });
+});
 
 adminRouter.get('/vehicles', async (_req, res, next) => {
   try {

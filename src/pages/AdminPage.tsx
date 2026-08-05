@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, type FormEvent } from 'react';
+import { useCallback, useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
 import { toast } from 'sonner';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
 import { adminToken, useAuth } from '@/lib/auth';
@@ -36,6 +36,29 @@ interface Lead {
 
 function authHeaders(): HeadersInit {
   return { Authorization: `Bearer ${adminToken()}` };
+}
+
+const ACCEPTED_IMAGE_TYPES = 'image/png,image/jpeg,image/webp,image/gif,image/avif,image/svg+xml';
+
+async function uploadImages(files: File[]): Promise<string[]> {
+  const token = adminToken();
+  const urls: string[] = [];
+  for (const file of files) {
+    const fd = new FormData();
+    fd.append('image', file);
+    const res = await fetch('/api/admin/upload', {
+      method: 'POST',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      body: fd,
+    });
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      throw new Error((body as { error?: string }).error ?? `Upload failed (${res.status})`);
+    }
+    const data = (await res.json()) as { url: string };
+    urls.push(data.url);
+  }
+  return urls;
 }
 
 function formatDate(value: string) {
@@ -145,6 +168,7 @@ function VehicleFormDialog({
 }) {
   const [draft, setDraft] = useState<VehicleDraft>(vehicle ? fromVehicle(vehicle) : EMPTY_DRAFT);
   const [busy, setBusy] = useState(false);
+  const [busyUpload, setBusyUpload] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -158,8 +182,46 @@ function VehicleFormDialog({
     setDraft((prev) => ({ ...prev, [key]: value }));
   };
 
+  const galleryUrls = draft.gallery.split(',').map((s) => s.trim()).filter(Boolean);
+
+  const handleImageUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    setBusyUpload(true);
+    setError(null);
+    try {
+      const [url] = await uploadImages(Array.from(files));
+      set('image', url);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Image upload failed');
+    } finally {
+      setBusyUpload(false);
+      e.target.value = '';
+    }
+  };
+
+  const handleGalleryUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    setBusyUpload(true);
+    setError(null);
+    try {
+      const urls = await uploadImages(Array.from(files));
+      setDraft((prev) => ({ ...prev, gallery: [...galleryUrls, ...urls].join(', ') }));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Image upload failed');
+    } finally {
+      setBusyUpload(false);
+      e.target.value = '';
+    }
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (!draft.image.trim()) {
+      setError('Please upload a main image before saving.');
+      return;
+    }
     setBusy(true);
     setError(null);
     try {
@@ -258,12 +320,53 @@ function VehicleFormDialog({
             <Input id="vf-color" required value={draft.color} onChange={(e) => set('color', e.target.value)} />
           </div>
           <div className="space-y-2 sm:col-span-2">
-            <Label htmlFor="vf-image">Image URL</Label>
-            <Input id="vf-image" required value={draft.image} onChange={(e) => set('image', e.target.value)} />
+            <Label htmlFor="vf-image">Main image</Label>
+            <div className="flex items-center gap-3">
+              {draft.image ? (
+                <img src={draft.image} alt="" className="h-16 w-24 shrink-0 rounded border object-cover" />
+              ) : (
+                <div className="flex h-16 w-24 shrink-0 items-center justify-center rounded border border-dashed text-xs text-muted-foreground">
+                  No image
+                </div>
+              )}
+              <Input
+                id="vf-image"
+                type="file"
+                accept={ACCEPTED_IMAGE_TYPES}
+                onChange={(e) => void handleImageUpload(e)}
+                disabled={busyUpload}
+              />
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {busyUpload ? 'Uploading…' : draft.image ? 'Upload a new image from your device to replace the current one.' : 'Upload an image from your device.'}
+            </p>
           </div>
           <div className="space-y-2 sm:col-span-2">
-            <Label htmlFor="vf-gallery">Gallery URLs (comma separated)</Label>
-            <Input id="vf-gallery" value={draft.gallery} onChange={(e) => set('gallery', e.target.value)} />
+            <Label htmlFor="vf-gallery">Gallery</Label>
+            <div className="flex items-center gap-3">
+              {galleryUrls.length > 0 ? (
+                <div className="flex max-w-56 shrink-0 gap-1.5 overflow-x-auto">
+                  {galleryUrls.map((g, i) => (
+                    <img key={`${g}-${i}`} src={g} alt="" className="h-12 w-16 shrink-0 rounded border object-cover" />
+                  ))}
+                </div>
+              ) : (
+                <div className="flex h-12 w-16 shrink-0 items-center justify-center rounded border border-dashed text-xs text-muted-foreground">
+                  —
+                </div>
+              )}
+              <Input
+                id="vf-gallery"
+                type="file"
+                accept={ACCEPTED_IMAGE_TYPES}
+                multiple
+                onChange={(e) => void handleGalleryUpload(e)}
+                disabled={busyUpload}
+              />
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Upload one or more images from your device. New images are appended to the existing gallery.
+            </p>
           </div>
           <div className="space-y-2 sm:col-span-2">
             <Label htmlFor="vf-features">Features (comma separated)</Label>

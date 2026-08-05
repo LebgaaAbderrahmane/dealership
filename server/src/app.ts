@@ -1,3 +1,5 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import express from 'express';
 import { vehiclesRouter } from './routes/vehicles';
 import { leadsRouter } from './routes/leads';
@@ -7,6 +9,9 @@ import { adminRouter } from './routes/admin';
 export function createApp() {
   const app = express();
   app.use(express.json({ limit: '1mb' }));
+
+  const uploadsDir = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'uploads');
+  app.use('/uploads', express.static(uploadsDir));
 
   app.get('/api/health', (_req, res) => {
     res.json({ ok: true });
