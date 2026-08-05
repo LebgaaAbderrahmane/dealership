@@ -247,7 +247,7 @@ function VehicleFormDialog({
         <DialogHeader>
           <DialogTitle>{vehicle ? 'Edit vehicle' : 'Add vehicle'}</DialogTitle>
           <DialogDescription>
-            Prices are stored in USD — the site renders them in DZD.
+            Prices are stored and displayed in USD.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 sm:grid-cols-2">

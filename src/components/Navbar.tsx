@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Link, NavLink, useNavigate } from 'react-router';
-import { ChevronRight, Menu, Phone, X } from 'lucide-react';
+import { ChevronRight, Menu, X } from 'lucide-react';
 import { Button } from './ui/button';
 import { cn } from '../lib/utils';
 
@@ -91,13 +91,6 @@ export function Navbar() {
           </nav>
 
           <div className="hidden items-center gap-6 lg:flex">
-            <a
-              href="tel:+213796269301"
-              className="flex items-center gap-2 text-sm font-semibold text-[var(--foreground)] transition-colors hover:text-[var(--primary)]"
-            >
-              <Phone className="h-4 w-4 text-[var(--primary)]" />
-              +213 796 26 93 01
-            </a>
             <Button onClick={() => navigate('/inventory')} size="sm">
               Browse Inventory
             </Button>
@@ -162,13 +155,6 @@ export function Navbar() {
               ))}
             </nav>
             <div className="space-y-3 px-6 pb-10">
-              <a
-                href="tel:+213796269301"
-                className="flex items-center justify-center gap-2 rounded-full border border-[var(--border)] py-4 font-semibold text-[var(--foreground)]"
-              >
-                <Phone className="h-4 w-4 text-[var(--primary)]" />
-                Tap to call +213 796 26 93 01
-              </a>
               <Button
                 className="w-full py-4"
                 onClick={() => {

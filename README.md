@@ -110,4 +110,4 @@ Copy `server/.env.example` to `server/.env` and adjust as needed:
 | `ADMIN_USERNAME` | `admin` | Seeded admin username |
 | `ADMIN_PASSWORD` | `admin123` | Seeded admin password (bcrypt-hashed) |
 
-Vehicle prices are stored and edited in **USD**; the SPA renders them in DZD (×250).
+Vehicle prices are stored and edited in **USD** and displayed in USD.

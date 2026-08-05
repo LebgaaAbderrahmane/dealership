@@ -230,7 +230,7 @@ export function VehicleDetailPage() {
               <Gauge className="mt-0.5 h-5 w-5 shrink-0 text-[var(--primary)]" />
               <span>
                 Advertised payment is an estimate based on {formatPrice(vehicle.price)}{' '}
-                at 6.9% APR for 60 months with a 1,250,000 DA down payment. Excludes
+                at 6.9% APR for 60 months with a $5,000 down payment. Excludes
                 tax, title, and dealer fees. Subject to credit approval.
               </span>
             </div>
