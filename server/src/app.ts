@@ -5,6 +5,7 @@ import { vehiclesRouter } from './routes/vehicles';
 import { leadsRouter } from './routes/leads';
 import { authRouter } from './routes/auth';
 import { adminRouter } from './routes/admin';
+import { settingsRouter } from './routes/settings';
 
 export function createApp() {
   const app = express();
@@ -21,6 +22,7 @@ export function createApp() {
   app.use('/api/leads', leadsRouter);
   app.use('/api/auth', authRouter);
   app.use('/api/admin', adminRouter);
+  app.use('/api/settings', settingsRouter);
 
   app.use((err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
     console.error(err);

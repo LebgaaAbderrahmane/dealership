@@ -3,6 +3,7 @@ import path from 'node:path';
 import bcrypt from 'bcryptjs';
 import 'dotenv/config';
 import { pool } from './db';
+import { DEFAULT_SETTINGS, SETTING_KEYS } from './settings-defaults';
 
 const SCHEMA = `
 CREATE TABLE IF NOT EXISTS vehicles (
@@ -47,6 +48,12 @@ CREATE TABLE IF NOT EXISTS admins (
   password_hash VARCHAR(200) NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   UNIQUE KEY uq_admins_username (username)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS settings (
+  setting_key VARCHAR(80) PRIMARY KEY,
+  value JSON NOT NULL,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 `;
 
@@ -132,6 +139,20 @@ export async function migrate() {
     } else {
       console.log('admin user already exists');
     }
+
+    for (const key of SETTING_KEYS) {
+      const [settingRows] = await conn.query<mysql.RowDataPacket[]>(
+        'SELECT COUNT(*) AS n FROM settings WHERE setting_key = ?',
+        [key],
+      );
+      if (Number(settingRows[0].n) === 0) {
+        await conn.query('INSERT INTO settings (setting_key, value) VALUES (?, ?)', [
+          key,
+          JSON.stringify(DEFAULT_SETTINGS[key]),
+        ]);
+      }
+    }
+    console.log('Settings seeded');
   } finally {
     conn.release();
   }

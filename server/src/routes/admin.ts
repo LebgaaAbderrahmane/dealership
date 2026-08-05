@@ -114,6 +114,42 @@ adminRouter.post('/upload', upload.single('image'), uploadErrorHandler, async (r
   }
 });
 
+adminRouter.get('/stats', async (_req, res, next) => {
+  try {
+    const [vehicleRows] = await pool.query<RowDataPacket[]>(
+      'SELECT COUNT(*) AS n FROM vehicles',
+    );
+    const [leadAgg] = await pool.query<RowDataPacket[]>(
+      `SELECT
+         COUNT(*) AS total,
+         SUM(status = 'new') AS new,
+         SUM(status = 'contacted') AS contacted,
+         SUM(status = 'done') AS done
+       FROM leads`,
+    );
+    const byKindRows = await query<{ kind: string; n: number }[]>(
+      'SELECT kind, COUNT(*) AS n FROM leads GROUP BY kind',
+    );
+    const recent = await query(
+      'SELECT id, kind, name, status, created_at FROM leads ORDER BY created_at DESC LIMIT 5',
+    );
+    const row = leadAgg[0] as { total: number; new: number; contacted: number; done: number };
+    res.json({
+      vehicles: { total: Number(vehicleRows[0].n) },
+      leads: {
+        total: Number(row.total),
+        new: Number(row.new),
+        contacted: Number(row.contacted),
+        done: Number(row.done),
+        byKind: Object.fromEntries(byKindRows.map((r) => [r.kind, Number(r.n)])),
+      },
+      recent,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 adminRouter.get('/vehicles', async (_req, res, next) => {
   try {
     const rows = await query(
