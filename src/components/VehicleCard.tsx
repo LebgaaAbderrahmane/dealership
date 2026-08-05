@@ -1,5 +1,6 @@
 import { motion } from 'motion/react';
 import { Link } from 'react-router';
+import { ArrowRight } from 'lucide-react';
 import type { Vehicle } from '../data/inventory';
 import { formatDistance, formatPrice } from '../lib/utils';
 
@@ -43,12 +44,13 @@ export function VehicleCard({ vehicle }: VehicleCardProps) {
           <div className="mt-1 text-sm text-[var(--muted-foreground)]">
             {formatDistance(vehicle.miles)} · {vehicle.drivetrain} · {vehicle.badge}
           </div>
-          <div className="mt-4 flex items-end justify-between">
+          <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <span className="font-display text-2xl font-bold tabular-nums text-[var(--foreground)]">
               {formatPrice(vehicle.price)}
             </span>
-            <span className="text-sm font-medium text-[var(--primary)]">
-              or {formatPrice(vehicle.monthly)}/mo
+            <span className="inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-[var(--primary)] px-4 py-2 text-xs font-semibold text-[var(--primary-foreground)] transition-all duration-300 group-hover:brightness-110 sm:w-auto">
+              View Details
+              <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
             </span>
           </div>
         </div>

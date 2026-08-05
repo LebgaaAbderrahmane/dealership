@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Link } from 'react-router';
-import { ArrowRight, Filter, Search, SlidersHorizontal } from 'lucide-react';
+import { ArrowRight, Search, SlidersHorizontal } from 'lucide-react';
 import { inventory, VEHICLE_COUNT, VEHICLE_MAKES, VEHICLE_TYPES } from '../data/inventory';
 import type { VehicleFilters } from '../lib/filters';
 import { cn, formatPrice } from '../lib/utils';
@@ -29,7 +29,6 @@ interface InventoryProps {
 }
 
 export function Inventory({ filters, onFiltersChange }: InventoryProps) {
-  const [visible, setVisible] = useState(PAGE_SIZE);
   const [sheetOpen, setSheetOpen] = useState(false);
 
   const filtered = useMemo(() => {
@@ -44,8 +43,8 @@ export function Inventory({ filters, onFiltersChange }: InventoryProps) {
     );
   }, [filters]);
 
-  const shown = filtered.slice(0, visible);
-  const hasMore = visible < filtered.length;
+  const shown = filtered.slice(0, PAGE_SIZE);
+  const hasMore = PAGE_SIZE < filtered.length;
 
   const update = (patch: Partial<VehicleFilters>) =>
     onFiltersChange({ ...filters, ...patch });
@@ -154,12 +153,6 @@ export function Inventory({ filters, onFiltersChange }: InventoryProps) {
         )}
 
         <div className="mt-14 flex flex-col items-center gap-5">
-          {hasMore && (
-            <Button variant="outline" size="lg" onClick={() => setVisible((v) => v + PAGE_SIZE)}>
-              <Filter className="h-4 w-4" />
-              Load more
-            </Button>
-          )}
           {!hasMore && filtered.length > 0 && (
             <p className="text-sm text-[var(--muted-foreground)]">
               Showing all {filtered.length} matching vehicles.
