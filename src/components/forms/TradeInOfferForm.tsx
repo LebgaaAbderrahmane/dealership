@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { BadgeDollarSign, RotateCcw } from 'lucide-react';
 import { Field, Input, Select } from '../ui/field';
 import { Button } from '../ui/button';
+import { useSubmitLead } from '../../hooks/useSubmitLead';
 import { formatDistance, formatPrice } from '../../lib/utils';
 
 interface OfferInputs {
@@ -50,6 +51,7 @@ function estimateOffer(inputs: OfferInputs): number {
 export function TradeInOfferForm() {
   const [inputs, setInputs] = useState<OfferInputs>(INITIAL);
   const [offer, setOffer] = useState<number | null>(null);
+  const { status, error, submit, reset } = useSubmitLead('trade-in');
 
   const set = (key: keyof OfferInputs, value: string) => {
     setInputs((prev) => ({ ...prev, [key]: value }));
@@ -58,10 +60,17 @@ export function TradeInOfferForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setOffer(estimateOffer(inputs));
+    const value = estimateOffer(inputs);
+    setOffer(value);
+    void submit({ ...inputs, offer: value }, e);
   };
 
-  if (offer !== null) {
+  const adjust = () => {
+    setOffer(null);
+    reset();
+  };
+
+  if (offer !== null && status === 'success') {
     return (
       <motion.div
         initial={{ opacity: 0, scale: 0.97 }}
@@ -84,7 +93,7 @@ export function TradeInOfferForm() {
           in and we'll verify in about fifteen minutes.
         </p>
         <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Button onClick={() => setOffer(null)}>
+          <Button onClick={adjust}>
             <RotateCcw className="h-4 w-4" />
             Adjust details
           </Button>
@@ -133,8 +142,9 @@ export function TradeInOfferForm() {
           </Select>
         </Field>
       </div>
-      <Button type="submit" size="lg" className="mt-6 w-full py-4">
-        Get My Offer
+      {error && <p className="mt-4 text-sm text-[var(--destructive)]">{error}</p>}
+      <Button type="submit" size="lg" className="mt-6 w-full py-4" disabled={status === 'submitting'}>
+        {status === 'submitting' ? 'Calculating…' : 'Get My Offer'}
       </Button>
       <p className="mt-4 text-center text-xs text-[var(--muted-foreground)]">
         Not a range — an actual number backed by current auction and retail data.

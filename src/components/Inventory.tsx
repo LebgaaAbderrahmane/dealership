@@ -1,9 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Link } from 'react-router';
 import { ArrowRight, Search, SlidersHorizontal } from 'lucide-react';
-import { inventory, VEHICLE_COUNT, VEHICLE_MAKES, VEHICLE_TYPES } from '../data/inventory';
+import { VEHICLE_COUNT } from '../data/inventory';
+import { VEHICLE_MAKES, VEHICLE_TYPES } from '../types/vehicle';
 import type { VehicleFilters } from '../lib/filters';
+import { useVehicles } from '../lib/vehicles';
 import { cn, formatPrice } from '../lib/utils';
 import { Button } from './ui/button';
 import { ChipSelect } from './ui/chip-select';
@@ -31,20 +33,14 @@ interface InventoryProps {
 export function Inventory({ filters, onFiltersChange }: InventoryProps) {
   const [sheetOpen, setSheetOpen] = useState(false);
 
-  const filtered = useMemo(() => {
-    const q = filters.query.trim().toLowerCase();
-    return inventory.filter(
-      (v) =>
-        (filters.type === 'All' || v.type === filters.type) &&
-        (filters.make === 'All' || v.make === filters.make) &&
-        v.price <= filters.maxPrice &&
-        v.monthly <= filters.maxMonthly &&
-        (!q || [v.name, v.make, v.type].some((s) => s.toLowerCase().includes(q))),
-    );
-  }, [filters]);
-
-  const shown = filtered.slice(0, PAGE_SIZE);
-  const hasMore = PAGE_SIZE < filtered.length;
+  const { vehicles: shown, total, loading } = useVehicles({
+    type: filters.type,
+    make: filters.make,
+    maxPrice: filters.maxPrice,
+    maxMonthly: filters.maxMonthly,
+    q: filters.query,
+    limit: PAGE_SIZE,
+  });
 
   const update = (patch: Partial<VehicleFilters>) =>
     onFiltersChange({ ...filters, ...patch });
@@ -86,7 +82,7 @@ export function Inventory({ filters, onFiltersChange }: InventoryProps) {
           />
         </div>
         <span className="ml-auto text-sm text-[var(--muted-foreground)]">
-          {filtered.length} vehicles
+          {total} vehicles
         </span>
       </div>
 
@@ -142,7 +138,13 @@ export function Inventory({ filters, onFiltersChange }: InventoryProps) {
           </AnimatePresence>
         </motion.div>
 
-        {shown.length === 0 && (
+        {loading && shown.length === 0 && (
+          <p className="py-16 text-center text-sm text-[var(--muted-foreground)]">
+            Loading inventory…
+          </p>
+        )}
+
+        {!loading && shown.length === 0 && (
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -153,9 +155,9 @@ export function Inventory({ filters, onFiltersChange }: InventoryProps) {
         )}
 
         <div className="mt-14 flex flex-col items-center gap-5">
-          {!hasMore && filtered.length > 0 && (
+          {total <= PAGE_SIZE && total > 0 && (
             <p className="text-sm text-[var(--muted-foreground)]">
-              Showing all {filtered.length} matching vehicles.
+              Showing all {total} matching vehicles.
             </p>
           )}
           <Link
@@ -197,7 +199,7 @@ export function Inventory({ filters, onFiltersChange }: InventoryProps) {
             className={cn('w-full py-4')}
             onClick={() => setSheetOpen(false)}
           >
-            Show {filtered.length} vehicles
+            Show {total} vehicles
           </Button>
         </div>
       </Drawer>

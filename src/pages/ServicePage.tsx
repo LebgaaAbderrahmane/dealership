@@ -5,7 +5,7 @@ import { SectionHeading } from '../components/ui/SectionHeading';
 import { Field, Input, Select, Textarea } from '../components/ui/field';
 import { Button } from '../components/ui/button';
 import { FormSuccess } from '../components/ui/form-success';
-import { useMockSubmit } from '../hooks/useMockSubmit';
+import { useSubmitLead } from '../hooks/useSubmitLead';
 import { CtaBand } from '../components/ui/CtaBand';
 
 const SERVICES = [
@@ -46,7 +46,7 @@ const HOURS = [
 ];
 
 export function ServicePage() {
-  const { status, submit, reset } = useMockSubmit();
+  const { status, error, submit, reset } = useSubmitLead('service');
 
   return (
     <>
@@ -141,24 +141,41 @@ export function ServicePage() {
                 onReset={reset}
               />
             ) : (
-              <form onSubmit={submit} className="rounded-2xl border border-[var(--border)] bg-[var(--card-elevated)] p-8">
+              <form
+                onSubmit={(e) => {
+                  const fd = new FormData(e.currentTarget);
+                  submit(
+                    {
+                      name: String(fd.get('name') ?? ''),
+                      phone: String(fd.get('phone') ?? ''),
+                      year: String(fd.get('year') ?? ''),
+                      vehicle: String(fd.get('vehicle') ?? ''),
+                      service: String(fd.get('service') ?? ''),
+                      date: String(fd.get('date') ?? ''),
+                      time: String(fd.get('time') ?? ''),
+                    },
+                    e,
+                  );
+                }}
+                className="rounded-2xl border border-[var(--border)] bg-[var(--card-elevated)] p-8"
+              >
                 <div className="grid gap-5 sm:grid-cols-2">
                   <Field label="Your name">
-                    <Input required placeholder="Jordan Mercer" />
+                    <Input required name="name" placeholder="Jordan Mercer" />
                   </Field>
                   <Field label="Phone">
-                    <Input required type="tel" placeholder="+213 7 00 00 00 00" />
+                    <Input required type="tel" name="phone" placeholder="+213 7 00 00 00 00" />
                   </Field>
                   <Field label="Vehicle year">
-                    <Input required type="number" placeholder="2021" />
+                    <Input required type="number" name="year" placeholder="2021" />
                   </Field>
                   <Field label="Vehicle make & model">
-                    <Input required placeholder="Aurora GT Line" />
+                    <Input required name="vehicle" placeholder="Aurora GT Line" />
                   </Field>
                 </div>
                 <div className="mt-5">
                   <Field label="Service needed">
-                    <Select defaultValue={SERVICE_TYPES[0]}>
+                    <Select name="service" defaultValue={SERVICE_TYPES[0]}>
                       {SERVICE_TYPES.map((s) => (
                         <option key={s} value={s}>
                           {s}
@@ -169,10 +186,10 @@ export function ServicePage() {
                 </div>
                 <div className="mt-5 grid gap-5 sm:grid-cols-2">
                   <Field label="Preferred date">
-                    <Input required type="date" />
+                    <Input required type="date" name="date" />
                   </Field>
                   <Field label="Preferred time">
-                    <Select defaultValue="Morning">
+                    <Select name="time" defaultValue="Morning">
                       <option>Morning (7am–12pm)</option>
                       <option>Afternoon (12–4pm)</option>
                       <option>Evening (4–6pm)</option>
@@ -181,9 +198,10 @@ export function ServicePage() {
                 </div>
                 <div className="mt-5">
                   <Field label="Notes (optional)">
-                    <Textarea placeholder="Warning light? Sounds? Anything we should know." />
+                    <Textarea name="notes" placeholder="Warning light? Sounds? Anything we should know." />
                   </Field>
                 </div>
+                {error && <p className="mt-4 text-sm text-[var(--destructive)]">{error}</p>}
                 <Button type="submit" size="lg" className="mt-6 w-full py-4" disabled={status === 'submitting'}>
                   {status === 'submitting' ? 'Booking…' : 'Schedule Service'}
                 </Button>

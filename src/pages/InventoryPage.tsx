@@ -1,8 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useSearchParams } from 'react-router';
 import { Filter, Search, SlidersHorizontal } from 'lucide-react';
-import { inventory, VEHICLE_COUNT, VEHICLE_MAKES, VEHICLE_TYPES } from '../data/inventory';
+import { VEHICLE_MAKES, VEHICLE_TYPES } from '../types/vehicle';
+import { useMeta, useVehicles } from '../lib/vehicles';
 import { formatPrice } from '../lib/utils';
 import { PageHero } from '../components/ui/PageHero';
 import { ChipSelect } from '../components/ui/chip-select';
@@ -36,6 +37,7 @@ export function InventoryPage() {
   const [visible, setVisible] = useState(PAGE_SIZE);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [sort, setSort] = useState('featured');
+  const meta = useMeta();
 
   const type = searchParams.get('type') ?? 'All';
   const make = searchParams.get('make') ?? 'All';
@@ -56,32 +58,19 @@ export function InventoryPage() {
     setVisible(PAGE_SIZE);
   };
 
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    const list = inventory.filter(
-      (v) =>
-        (type === 'All' || v.type === type) &&
-        (make === 'All' || v.make === make) &&
-        v.price <= maxPrice &&
-        v.monthly <= maxMonthly &&
-        (!q || [v.name, v.make, v.type].some((s) => s.toLowerCase().includes(q))),
-    );
-    switch (sort) {
-      case 'price-asc':
-        return [...list].sort((a, b) => a.price - b.price);
-      case 'price-desc':
-        return [...list].sort((a, b) => b.price - a.price);
-      case 'miles-asc':
-        return [...list].sort((a, b) => a.miles - b.miles);
-      case 'monthly-asc':
-        return [...list].sort((a, b) => a.monthly - b.monthly);
-      default:
-        return list;
-    }
-  }, [type, make, maxPrice, maxMonthly, query, sort]);
+  const { vehicles: shown, total, loading } = useVehicles({
+    type,
+    make,
+    maxPrice,
+    maxMonthly,
+    q: query,
+    sort,
+    limit: visible,
+  });
 
-  const shown = filtered.slice(0, visible);
-  const hasMore = visible < filtered.length;
+  const hasMore = total > visible;
+  const metaCount = meta?.count;
+  const metaMakes = meta?.makes ?? VEHICLE_MAKES;
 
   const filterBar = (
     <>
@@ -128,7 +117,7 @@ export function InventoryPage() {
           />
         </div>
         <span className="w-full text-sm text-[var(--muted-foreground)] lg:w-auto lg:min-w-[6rem] lg:text-right">
-          {filtered.length} vehicles
+          {total} vehicles
         </span>
       </div>
 
@@ -160,7 +149,7 @@ export function InventoryPage() {
       <PageHero
         eyebrow="In stock now"
         title="Browse Inventory"
-        subline={`${VEHICLE_COUNT} vehicles across ${VEHICLE_MAKES.length} makes. Every listing shows both the price and the payment.`}
+        subline={`${metaCount ?? 'All'} vehicles across ${metaMakes.length} makes. Every listing shows both the price and the payment.`}
       />
 
       <div className="sticky top-[76px] z-30 border-y border-[var(--border)] bg-[var(--background)]/95 py-3 backdrop-blur">
@@ -177,7 +166,13 @@ export function InventoryPage() {
             </AnimatePresence>
           </motion.div>
 
-          {shown.length === 0 && (
+          {loading && shown.length === 0 && (
+            <p className="py-16 text-center text-sm text-[var(--muted-foreground)]">
+              Loading inventory…
+            </p>
+          )}
+
+          {!loading && shown.length === 0 && (
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -195,9 +190,9 @@ export function InventoryPage() {
                 Load more
               </Button>
             ) : (
-              filtered.length > 0 && (
+              total > 0 && (
                 <p className="text-sm text-[var(--muted-foreground)]">
-                  Showing all {filtered.length} matching vehicles.
+                  Showing all {total} matching vehicles.
                 </p>
               )
             )}
@@ -238,7 +233,7 @@ export function InventoryPage() {
             className="w-full justify-between"
           />
           <Button className="w-full py-4" onClick={() => setSheetOpen(false)}>
-            Show {filtered.length} vehicles
+            Show {total} vehicles
           </Button>
         </div>
       </Drawer>

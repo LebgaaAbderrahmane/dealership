@@ -7,17 +7,26 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "dev:server": "pnpm --dir server dev",
+    "db:up": "docker compose up -d",
+    "db:migrate": "pnpm --dir server migrate",
+    "seed": "pnpm --dir server exec tsx scripts/dump-vehicles.ts"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.23",
+    "@radix-ui/react-label": "^2.1.15",
     "@radix-ui/react-select": "^2.3.7",
     "@radix-ui/react-slider": "^1.4.7",
+    "@radix-ui/react-slot": "^1.3.3",
+    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.28.0",
     "motion": "^12.43.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-router": "^8.3.0",
+    "sonner": "^2.0.7",
     "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {

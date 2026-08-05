@@ -4,7 +4,7 @@ import { PageHero } from '../components/ui/PageHero';
 import { Field, Input, Select, Textarea } from '../components/ui/field';
 import { Button } from '../components/ui/button';
 import { FormSuccess } from '../components/ui/form-success';
-import { useMockSubmit } from '../hooks/useMockSubmit';
+import { useSubmitLead } from '../hooks/useSubmitLead';
 
 const CARDS = [
   {
@@ -36,7 +36,7 @@ const CARDS = [
 const SUBJECTS = ['General question', 'Test drive request', 'Service appointment', 'Trade-in inquiry', 'Financing help'];
 
 export function ContactPage() {
-  const { status, submit, reset } = useMockSubmit();
+  const { status, error, submit, reset } = useSubmitLead('contact');
 
   return (
     <>
@@ -125,18 +125,34 @@ export function ContactPage() {
                 onReset={reset}
               />
             ) : (
-              <form onSubmit={submit} className="rounded-2xl border border-[var(--border)] bg-[var(--card-elevated)] p-8">
+              <form
+                onSubmit={(e) => {
+                  const fd = new FormData(e.currentTarget);
+                  const contact = String(fd.get('contact') ?? '');
+                  const isEmail = contact.includes('@');
+                  submit(
+                    {
+                      name: String(fd.get('name') ?? ''),
+                      [isEmail ? 'email' : 'phone']: contact,
+                      topic: String(fd.get('topic') ?? ''),
+                      message: String(fd.get('message') ?? ''),
+                    },
+                    e,
+                  );
+                }}
+                className="rounded-2xl border border-[var(--border)] bg-[var(--card-elevated)] p-8"
+              >
                 <div className="grid gap-5 sm:grid-cols-2">
                   <Field label="Your name">
-                    <Input required placeholder="Jordan Mercer" />
+                    <Input required name="name" placeholder="Jordan Mercer" />
                   </Field>
                   <Field label="Phone or email">
-                    <Input required placeholder="+213 7 00 00 00 00" />
+                    <Input required name="contact" placeholder="+213 7 00 00 00 00" />
                   </Field>
                 </div>
                 <div className="mt-5">
                   <Field label="Topic">
-                    <Select defaultValue={SUBJECTS[0]}>
+                    <Select name="topic" defaultValue={SUBJECTS[0]}>
                       {SUBJECTS.map((s) => (
                         <option key={s} value={s}>
                           {s}
@@ -147,9 +163,12 @@ export function ContactPage() {
                 </div>
                 <div className="mt-5">
                   <Field label="Message">
-                    <Textarea required placeholder="How can we help?" />
+                    <Textarea required name="message" placeholder="How can we help?" />
                   </Field>
                 </div>
+                {error && (
+                  <p className="mt-4 text-sm text-[var(--destructive)]">{error}</p>
+                )}
                 <Button type="submit" size="lg" className="mt-6 w-full py-4" disabled={status === 'submitting'}>
                   <MessageSquare className="h-4 w-4" />
                   {status === 'submitting' ? 'Sending…' : 'Send Message'}

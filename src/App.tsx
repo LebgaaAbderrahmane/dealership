@@ -1,4 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router';
+import { Toaster } from 'sonner';
+import { AuthProvider } from '@/lib/auth';
 import { SiteLayout } from './layouts/SiteLayout';
 import { HomePage } from './pages/HomePage';
 import { InventoryPage } from './pages/InventoryPage';
@@ -11,25 +13,40 @@ import { ContactPage } from './pages/ContactPage';
 import { PrivacyPage } from './pages/PrivacyPage';
 import { AccessibilityPage } from './pages/AccessibilityPage';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { AdminLoginPage } from './pages/AdminLoginPage';
+import { AdminPage } from './pages/AdminPage';
+import { RequireAuth } from './components/admin/RequireAuth';
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route element={<SiteLayout />}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/inventory" element={<InventoryPage />} />
-          <Route path="/vehicle/:id" element={<VehicleDetailPage />} />
-          <Route path="/financing" element={<FinancingPage />} />
-          <Route path="/trade-in" element={<TradeInPage />} />
-          <Route path="/service" element={<ServicePage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/privacy" element={<PrivacyPage />} />
-          <Route path="/accessibility" element={<AccessibilityPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<SiteLayout />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/inventory" element={<InventoryPage />} />
+            <Route path="/vehicle/:id" element={<VehicleDetailPage />} />
+            <Route path="/financing" element={<FinancingPage />} />
+            <Route path="/trade-in" element={<TradeInPage />} />
+            <Route path="/service" element={<ServicePage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/accessibility" element={<AccessibilityPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Route>
+          <Route path="/admin/login" element={<AdminLoginPage />} />
+          <Route
+            path="/admin"
+            element={
+              <RequireAuth>
+                <AdminPage />
+              </RequireAuth>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+      <Toaster theme="dark" position="bottom-right" />
+    </AuthProvider>
   );
 }

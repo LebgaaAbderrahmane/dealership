@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { motion } from 'motion/react';
 import { BadgeCheck, CalendarCheck, ChevronRight, Gauge, KeyRound, ShieldCheck, Zap } from 'lucide-react';
-import { getVehicleById, similarVehicles } from '../data/inventory';
+import { useSimilar, useVehicle } from '../lib/vehicles';
 import { formatDistance, formatPrice } from '../lib/utils';
 import { Button } from '../components/ui/button';
 import { VehicleCard } from '../components/VehicleCard';
@@ -26,8 +26,19 @@ function SpecRow({ label, value }: { label: string; value: string }) {
 
 export function VehicleDetailPage() {
   const { id } = useParams();
-  const vehicle = getVehicleById(id);
+  const { vehicle, loading } = useVehicle(id);
   const [active, setActive] = useState(0);
+  const similar = useSimilar(vehicle, 3);
+
+  useEffect(() => setActive(0), [id]);
+
+  if (loading) {
+    return (
+      <section className="flex min-h-[60vh] items-center justify-center px-6 pt-[76px]">
+        <p className="text-sm text-[var(--muted-foreground)]">Loading vehicle…</p>
+      </section>
+    );
+  }
 
   if (!vehicle) {
     return (
@@ -46,8 +57,6 @@ export function VehicleDetailPage() {
       </section>
     );
   }
-
-  const similar = similarVehicles(vehicle, 3);
 
   return (
     <>

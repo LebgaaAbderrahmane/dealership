@@ -12,6 +12,21 @@
   --card: hsl(220, 13%, 12%);
   --card-elevated: hsl(220, 12%, 16%);
   --success: hsl(152, 62%, 44%);
+  --destructive: hsl(0, 72%, 56%);
+
+  /* shadcn tokens */
+  --card-foreground: hsl(210, 16%, 95%);
+  --popover: hsl(220, 13%, 12%);
+  --popover-foreground: hsl(210, 16%, 95%);
+  --secondary: hsl(220, 12%, 20%);
+  --secondary-foreground: hsl(210, 16%, 95%);
+  --muted: hsl(220, 12%, 16%);
+  --accent: hsl(220, 12%, 20%);
+  --accent-foreground: hsl(206, 100%, 80%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --input: hsl(220, 12%, 20%);
+  --ring: hsl(206, 100%, 52%);
+  --radius: 0.75rem;
 }
 
 @layer base {

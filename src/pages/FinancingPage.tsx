@@ -7,7 +7,7 @@ import { FaqAccordion } from '../components/ui/FaqAccordion';
 import { Field, Input, Select } from '../components/ui/field';
 import { Button } from '../components/ui/button';
 import { FormSuccess } from '../components/ui/form-success';
-import { useMockSubmit } from '../hooks/useMockSubmit';
+import { useSubmitLead } from '../hooks/useSubmitLead';
 import { CtaBand } from '../components/ui/CtaBand';
 
 const LENDERS = [
@@ -56,7 +56,7 @@ const FAQS = [
 ];
 
 export function FinancingPage() {
-  const { status, submit, reset } = useMockSubmit();
+  const { status, error, submit, reset } = useSubmitLead('pre-qualify');
 
   return (
     <>
@@ -171,33 +171,50 @@ export function FinancingPage() {
                 onReset={reset}
               />
             ) : (
-              <form onSubmit={submit} className="space-y-5">
+              <form
+                onSubmit={(e) => {
+                  const fd = new FormData(e.currentTarget);
+                  submit(
+                    {
+                      firstName: String(fd.get('firstName') ?? ''),
+                      lastName: String(fd.get('lastName') ?? ''),
+                      email: String(fd.get('email') ?? ''),
+                      phone: String(fd.get('phone') ?? ''),
+                      income: String(fd.get('income') ?? ''),
+                      preferredContact: String(fd.get('preferredContact') ?? 'phone'),
+                    },
+                    e,
+                  );
+                }}
+                className="space-y-5"
+              >
                 <div className="grid gap-5 sm:grid-cols-2">
                   <Field label="First name">
-                    <Input required placeholder="Jordan" />
+                    <Input required name="firstName" placeholder="Jordan" />
                   </Field>
                   <Field label="Last name">
-                    <Input required placeholder="Mercer" />
+                    <Input required name="lastName" placeholder="Mercer" />
                   </Field>
                 </div>
                 <div className="grid gap-5 sm:grid-cols-2">
                   <Field label="Email">
-                    <Input required type="email" placeholder="jordan@email.com" />
+                    <Input required type="email" name="email" placeholder="jordan@email.com" />
                   </Field>
                   <Field label="Phone">
-                    <Input required type="tel" placeholder="+213 7 00 00 00 00" />
+                    <Input required type="tel" name="phone" placeholder="+213 7 00 00 00 00" />
                   </Field>
                 </div>
                 <Field label="Estimated monthly income">
-                  <Input required type="number" placeholder="6500" />
+                  <Input required type="number" name="income" placeholder="6500" />
                 </Field>
                 <Field label="Preferred contact">
-                  <Select defaultValue="phone">
+                  <Select name="preferredContact" defaultValue="phone">
                     <option value="phone">Phone</option>
                     <option value="email">Email</option>
                     <option value="text">Text message</option>
                   </Select>
                 </Field>
+                {error && <p className="text-sm text-[var(--destructive)]">{error}</p>}
                 <Button type="submit" size="lg" className="w-full py-4" disabled={status === 'submitting'}>
                   {status === 'submitting' ? 'Checking…' : 'Get Pre-Qualified'}
                 </Button>
