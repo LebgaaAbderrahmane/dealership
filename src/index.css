@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 :root {
+  color-scheme: dark;
   --background: hsl(220, 14%, 8%); /* #12141a near-black */
   --foreground: hsl(210, 16%, 95%); /* #eff1f4 */
   --primary: hsl(206, 100%, 52%); /* #0a90ff electric blue */
@@ -131,4 +132,15 @@
 }
 .legal-prose a {
   @apply text-[var(--primary)] hover:underline;
+}
+
+/* Hide number input spinners (they add nothing to our step-based fields) */
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
 }

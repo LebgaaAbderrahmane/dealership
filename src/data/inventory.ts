@@ -42,6 +42,18 @@ export const TRADE_IN_IMAGE =
 export const ABOUT_IMAGE =
   'https://images.unsplash.com/photo-1542362567-b07e54358753?q=80&w=1600&auto=format&fit=crop';
 
+export const SERVICE_IMAGE =
+  'https://images.unsplash.com/photo-1621939514649-280e2ee25f60?q=80&w=2400&auto=format&fit=crop';
+
+export const CONTACT_IMAGE =
+  'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=2400&auto=format&fit=crop';
+
+export const PRIVACY_IMAGE =
+  'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=2400&auto=format&fit=crop';
+
+export const ACCESSIBILITY_IMAGE =
+  'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?q=80&w=2400&auto=format&fit=crop';
+
 const TYPE_SPECS: Record<VehicleType, { drivetrain: string; fuel: string; transmission: string; mpg: number }> = {
   Sedan: { drivetrain: 'AWD', fuel: 'Gasoline', transmission: '8-Speed Auto', mpg: 28 },
   SUV: { drivetrain: 'AWD', fuel: 'Gasoline', transmission: '8-Speed Auto', mpg: 24 },

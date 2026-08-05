@@ -3,6 +3,7 @@ import { PageHero } from '../components/ui/PageHero';
 import { SectionHeading } from '../components/ui/SectionHeading';
 import { TradeInOfferForm } from '../components/forms/TradeInOfferForm';
 import { CtaBand } from '../components/ui/CtaBand';
+import { TRADE_IN_IMAGE } from '../data/inventory';
 
 const STEPS = [
   {
@@ -26,6 +27,8 @@ export function TradeInPage() {
         eyebrow="Trade-In"
         title="Your Car Is Worth More Than You Think"
         subline="Get a real, itemized offer in two minutes. If it matches our online number when you arrive, we honor it — even if you don't buy from us."
+        image={TRADE_IN_IMAGE}
+        alt="Apex Motors trade-in bay"
       />
 
       <section className="bg-[var(--background)] py-16 md:py-24">

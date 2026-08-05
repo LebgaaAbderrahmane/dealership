@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { CreditCard, HandCoins, Landmark, Wallet } from 'lucide-react';
-import { PageHero } from '../components/ui/PageHero';
+import { PageTitle } from '../components/ui/PageTitle';
 import { PaymentCalculator } from '../components/PaymentCalculator';
 import { SectionHeading } from '../components/ui/SectionHeading';
 import { FaqAccordion } from '../components/ui/FaqAccordion';
@@ -60,7 +60,7 @@ export function FinancingPage() {
 
   return (
     <>
-      <PageHero
+      <PageTitle
         eyebrow="Financing"
         title="Financing Made Transparent"
         subline="Know your payment before you walk in. Pre-qualify with a soft credit check, compare rates, and arrive ready to sign — no four-hour finance office marathon."

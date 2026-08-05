@@ -1,4 +1,5 @@
 import { LegalDoc } from '../components/ui/LegalDoc';
+import { PRIVACY_IMAGE } from '../data/inventory';
 
 export function PrivacyPage() {
   return (
@@ -6,6 +7,7 @@ export function PrivacyPage() {
       eyebrow="Legal"
       title="Privacy Policy"
       updated="June 1, 2026"
+      image={PRIVACY_IMAGE}
     >
       <p>
         Apex Motors LLC ("Apex," "we," "us") respects your privacy. This policy

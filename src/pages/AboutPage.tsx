@@ -48,6 +48,8 @@ export function AboutPage() {
         eyebrow="About Apex"
         title="A Dealership Built on Trust, Not Tactics"
         subline="We started Apex Motors in 2014 with one idea: the car-buying experience should be as good as the car. Twelve years later, that's still the whole plan."
+        image={ABOUT_IMAGE}
+        alt="Apex Motors showroom floor"
       />
 
       <section className="bg-[var(--background)] py-16 md:py-24">

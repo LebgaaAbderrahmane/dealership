@@ -7,6 +7,7 @@ import { Button } from '../components/ui/button';
 import { FormSuccess } from '../components/ui/form-success';
 import { useSubmitLead } from '../hooks/useSubmitLead';
 import { CtaBand } from '../components/ui/CtaBand';
+import { SERVICE_IMAGE } from '../data/inventory';
 
 const SERVICES = [
   {
@@ -54,6 +55,8 @@ export function ServicePage() {
         eyebrow="Service department"
         title="We Keep It Running"
         subline="Certified technicians, genuine parts, and honest estimates. Book online and we'll have your bay ready when you arrive."
+        image={SERVICE_IMAGE}
+        alt="Apex Motors service bay"
       />
 
       <section className="bg-[var(--background)] py-16 md:py-24">

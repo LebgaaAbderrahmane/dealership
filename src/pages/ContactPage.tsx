@@ -5,6 +5,7 @@ import { Field, Input, Select, Textarea } from '../components/ui/field';
 import { Button } from '../components/ui/button';
 import { FormSuccess } from '../components/ui/form-success';
 import { useSubmitLead } from '../hooks/useSubmitLead';
+import { CONTACT_IMAGE } from '../data/inventory';
 
 const CARDS = [
   {
@@ -44,6 +45,8 @@ export function ContactPage() {
         eyebrow="Contact"
         title="Talk to a Real Human"
         subline="Call, text, or drop by — we answer seven days a week. Expect a reply within the hour during business hours."
+        image={CONTACT_IMAGE}
+        alt="Driving toward the Apex Motors lot"
       />
 
       <section className="bg-[var(--background)] py-16 md:py-24">

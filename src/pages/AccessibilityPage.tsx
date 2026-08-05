@@ -1,4 +1,5 @@
 import { LegalDoc } from '../components/ui/LegalDoc';
+import { ACCESSIBILITY_IMAGE } from '../data/inventory';
 
 export function AccessibilityPage() {
   return (
@@ -6,6 +7,7 @@ export function AccessibilityPage() {
       eyebrow="Legal"
       title="Accessibility Statement"
       updated="June 1, 2026"
+      image={ACCESSIBILITY_IMAGE}
     >
       <p>
         Apex Motors is committed to ensuring our website is accessible to everyone,
