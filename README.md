@@ -91,6 +91,7 @@ All public routes are unauthenticated; admin routes require `Authorization: Bear
 - `POST /api/leads` — `kind`: `contact | pre-qualify | service | trade-in`
 - `POST /api/auth/login`, `GET /api/auth/me`
 - `GET /api/admin/vehicles`, `POST /api/admin/vehicles`, `PUT /api/admin/vehicles/:id`, `DELETE /api/admin/vehicles/:id`
+- `POST /api/admin/upload` — multipart field `image` (max 15 MB). Raster images are resized to ≤1920px and converted to WebP (quality 82); SVGs pass through as-is. Returns `{ url: '/uploads/<file>' }`, served statically at `/uploads`.
 - `GET /api/admin/leads`, `PATCH /api/admin/leads/:id/status` (`new | contacted | done`)
 
 ## Configuration

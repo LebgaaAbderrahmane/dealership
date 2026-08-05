@@ -338,7 +338,8 @@ function VehicleFormDialog({
               />
             </div>
             <p className="text-xs text-muted-foreground">
-              {busyUpload ? 'Uploading…' : draft.image ? 'Upload a new image from your device to replace the current one.' : 'Upload an image from your device.'}
+              {busyUpload ? 'Uploading…' : draft.image ? 'Upload a new image from your device to replace the current one.' : 'Upload an image from your device.'}{' '}
+              Large images are resized to 1920px and compressed to WebP on upload.
             </p>
           </div>
           <div className="space-y-2 sm:col-span-2">
@@ -365,7 +366,7 @@ function VehicleFormDialog({
               />
             </div>
             <p className="text-xs text-muted-foreground">
-              Upload one or more images from your device. New images are appended to the existing gallery.
+              Upload one or more images from your device. New images are appended to the existing gallery. Large images are compressed to WebP on upload.
             </p>
           </div>
           <div className="space-y-2 sm:col-span-2">
