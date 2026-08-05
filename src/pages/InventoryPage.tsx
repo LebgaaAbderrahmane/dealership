@@ -5,7 +5,8 @@ import { Filter, Search, SlidersHorizontal } from 'lucide-react';
 import { VEHICLE_MAKES, VEHICLE_TYPES } from '../types/vehicle';
 import { useMeta, useVehicles } from '../lib/vehicles';
 import { formatPrice } from '../lib/utils';
-import { PageTitle } from '../components/ui/PageTitle';
+import { PageHero } from '../components/ui/PageHero';
+import { HERO_IMAGE } from '../data/inventory';
 import { ChipSelect } from '../components/ui/chip-select';
 import { Slider } from '../components/ui/slider';
 import { Drawer } from '../components/ui/drawer';
@@ -146,10 +147,12 @@ export function InventoryPage() {
 
   return (
     <>
-      <PageTitle
+      <PageHero
         eyebrow="In stock now"
         title="Browse Inventory"
         subline={`${metaCount ?? 'All'} vehicles across ${metaMakes.length} makes. Every listing shows both the price and the payment.`}
+        image={HERO_IMAGE}
+        alt="Apex Motors inventory on a city street at night"
       />
 
       <div className="sticky top-[76px] z-30 border-y border-[var(--border)] bg-[var(--background)]/95 py-3 backdrop-blur">

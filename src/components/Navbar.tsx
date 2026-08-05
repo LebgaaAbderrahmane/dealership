@@ -6,6 +6,7 @@ import { Button } from './ui/button';
 import { cn } from '../lib/utils';
 
 const NAV_LINKS = [
+  { label: 'Home', to: '/' },
   { label: 'Inventory', to: '/inventory' },
   { label: 'Financing', to: '/financing' },
   { label: 'Trade-In', to: '/trade-in' },

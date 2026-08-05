@@ -36,6 +36,9 @@ const PHOTO_POOL = [
 export const HERO_IMAGE =
   'https://images.unsplash.com/photo-1493238792000-8113da705763?q=80&w=2400&auto=format&fit=crop';
 
+export const FINANCE_IMAGE =
+  'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=2400&auto=format&fit=crop';
+
 export const TRADE_IN_IMAGE =
   'https://images.unsplash.com/photo-1607860108855-64acf2078ed9?q=80&w=1600&auto=format&fit=crop';
 

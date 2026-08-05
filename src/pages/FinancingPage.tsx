@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { CreditCard, HandCoins, Landmark, Wallet } from 'lucide-react';
-import { PageTitle } from '../components/ui/PageTitle';
+import { PageHero } from '../components/ui/PageHero';
+import { FINANCE_IMAGE } from '../data/inventory';
 import { PaymentCalculator } from '../components/PaymentCalculator';
 import { SectionHeading } from '../components/ui/SectionHeading';
 import { FaqAccordion } from '../components/ui/FaqAccordion';
@@ -60,10 +61,12 @@ export function FinancingPage() {
 
   return (
     <>
-      <PageTitle
+      <PageHero
         eyebrow="Financing"
         title="Financing Made Transparent"
         subline="Know your payment before you walk in. Pre-qualify with a soft credit check, compare rates, and arrive ready to sign — no four-hour finance office marathon."
+        image={FINANCE_IMAGE}
+        alt="Driving home in a new Apex Motors vehicle"
       />
 
       <PaymentCalculator />
