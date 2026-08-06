@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
 import { toast } from 'sonner';
-import { Car, Inbox, LayoutDashboard, Pencil, Plus, Settings, Trash2 } from 'lucide-react';
+import { Car, Inbox, LayoutDashboard, Pencil, Plus, Settings, ShoppingCart, Trash2 } from 'lucide-react';
 import { adminToken, useAuth } from '@/lib/auth';
 import { apiFetch } from '@/lib/api';
 import type { Vehicle } from '@/types/vehicle';
@@ -21,6 +21,7 @@ import {
 import { cn, formatNumber } from '@/lib/utils';
 import { DashboardTab, type AdminTab } from '@/components/admin/DashboardTab';
 import { SettingsTab } from '@/components/admin/SettingsTab';
+import { OrdersTab } from '@/components/admin/OrdersTab';
 
 type Tab = AdminTab;
 
@@ -612,6 +613,7 @@ function LeadsTab() {
 const NAV_ITEMS: { id: Tab; label: string; icon: typeof LayoutDashboard }[] = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { id: 'vehicles', label: 'Vehicles', icon: Car },
+  { id: 'orders', label: 'Orders', icon: ShoppingCart },
   { id: 'leads', label: 'Leads', icon: Inbox },
   { id: 'settings', label: 'Settings', icon: Settings },
 ];
@@ -690,6 +692,7 @@ export function AdminPage() {
         <main className="mx-auto w-full max-w-6xl px-6 py-8">
           {tab === 'dashboard' && <DashboardTab onNavigate={setTab} />}
           {tab === 'vehicles' && <VehiclesTab />}
+          {tab === 'orders' && <OrdersTab />}
           {tab === 'leads' && <LeadsTab />}
           {tab === 'settings' && <SettingsTab />}
         </main>

@@ -51,6 +51,9 @@ export const SERVICE_IMAGE =
 export const CONTACT_IMAGE =
   'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=2400&auto=format&fit=crop';
 
+export const CHECKOUT_IMAGE =
+  'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=2400&auto=format&fit=crop';
+
 export const PRIVACY_IMAGE =
   'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=2400&auto=format&fit=crop';
 

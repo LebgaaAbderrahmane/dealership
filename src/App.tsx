@@ -5,6 +5,7 @@ import { SiteLayout } from './layouts/SiteLayout';
 import { HomePage } from './pages/HomePage';
 import { InventoryPage } from './pages/InventoryPage';
 import { VehicleDetailPage } from './pages/VehicleDetailPage';
+import { CheckoutPage } from './pages/CheckoutPage';
 import { FinancingPage } from './pages/FinancingPage';
 import { TradeInPage } from './pages/TradeInPage';
 import { ServicePage } from './pages/ServicePage';
@@ -26,6 +27,7 @@ export default function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/inventory" element={<InventoryPage />} />
             <Route path="/vehicle/:id" element={<VehicleDetailPage />} />
+            <Route path="/checkout/:id" element={<CheckoutPage />} />
             <Route path="/financing" element={<FinancingPage />} />
             <Route path="/trade-in" element={<TradeInPage />} />
             <Route path="/service" element={<ServicePage />} />

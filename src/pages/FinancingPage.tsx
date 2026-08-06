@@ -128,7 +128,7 @@ export function FinancingPage() {
         </div>
       </section>
 
-      <section className="bg-[var(--background)] py-16 md:py-24">
+      <section id="pre-qualify" className="bg-[var(--background)] py-16 md:py-24">
         <div className="container-apex grid items-start gap-12 lg:grid-cols-2">
           <motion.div
             initial={{ opacity: 0, y: 28 }}

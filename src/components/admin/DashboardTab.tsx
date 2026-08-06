@@ -1,17 +1,19 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ArrowUpRight, Car, Inbox, Plus, Settings } from 'lucide-react';
+import { ArrowUpRight, Car, Inbox, Plus, Settings, ShoppingCart } from 'lucide-react';
 import { adminToken } from '@/lib/auth';
 import { apiFetch } from '@/lib/api';
 import { Button } from '@/components/shadcn/button';
 import { Badge } from '@/components/shadcn/badge';
 import { cn, formatNumber } from '@/lib/utils';
 
-export type AdminTab = 'dashboard' | 'vehicles' | 'leads' | 'settings';
+export type AdminTab = 'dashboard' | 'vehicles' | 'leads' | 'settings' | 'orders';
 
 interface Stats {
   vehicles: { total: number };
   leads: { total: number; new: number; contacted: number; done: number; byKind: Record<string, number> };
+  orders: { total: number; new: number; contacted: number; closed: number; cancelled: number };
   recent: { id: number; kind: string; name: string; status: string; created_at: string }[];
+  recentOrders: { id: number; vehicle_name: string; vehicle_price: number; name: string; status: string; created_at: string }[];
 }
 
 const KIND_LABEL: Record<string, string> = {
@@ -81,10 +83,12 @@ export function DashboardTab({ onNavigate }: { onNavigate: (tab: AdminTab) => vo
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-7">
             <StatCard label="Vehicles" value={formatNumber(stats.vehicles.total)} />
+            <StatCard label="Orders" value={formatNumber(stats.orders.total)} accent />
+            <StatCard label="New orders" value={formatNumber(stats.orders.new)} />
             <StatCard label="Total leads" value={formatNumber(stats.leads.total)} />
-            <StatCard label="New" value={formatNumber(stats.leads.new)} accent />
+            <StatCard label="New leads" value={formatNumber(stats.leads.new)} />
             <StatCard label="Contacted" value={formatNumber(stats.leads.contacted)} />
             <StatCard label="Done" value={formatNumber(stats.leads.done)} />
           </div>
@@ -119,6 +123,9 @@ export function DashboardTab({ onNavigate }: { onNavigate: (tab: AdminTab) => vo
               <div className="mt-4 grid gap-2">
                 <Button variant="outline" className="justify-start" onClick={() => onNavigate('vehicles')}>
                   <Plus /> Add a vehicle
+                </Button>
+                <Button variant="outline" className="justify-start" onClick={() => onNavigate('orders')}>
+                  <ShoppingCart /> Review orders
                 </Button>
                 <Button variant="outline" className="justify-start" onClick={() => onNavigate('leads')}>
                   <Inbox /> Review leads
@@ -164,6 +171,50 @@ export function DashboardTab({ onNavigate }: { onNavigate: (tab: AdminTab) => vo
                         onClick={() => onNavigate('leads')}
                         className="text-muted-foreground transition-colors hover:text-foreground"
                         aria-label={`View lead ${lead.id}`}
+                      >
+                        <ArrowUpRight className="h-4 w-4" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="overflow-x-auto rounded-lg border">
+            <table className="w-full text-sm">
+              <thead className="border-b bg-muted text-left text-xs uppercase tracking-wide text-muted-foreground">
+                <tr>
+                  <th className="px-4 py-3 font-medium">Recent orders</th>
+                  <th className="px-4 py-3 font-medium">Vehicle</th>
+                  <th className="px-4 py-3 font-medium">Status</th>
+                  <th className="px-4 py-3 font-medium">Received</th>
+                  <th className="px-4 py-3" />
+                </tr>
+              </thead>
+              <tbody className="divide-y">
+                {stats.recentOrders.length === 0 && (
+                  <tr>
+                    <td colSpan={5} className="px-4 py-10 text-center text-muted-foreground">
+                      No orders yet — buyers checking out land here.
+                    </td>
+                  </tr>
+                )}
+                {stats.recentOrders.map((order) => (
+                  <tr key={order.id} className="hover:bg-muted/50">
+                    <td className="px-4 py-3 font-medium">#{order.id} · {order.name}</td>
+                    <td className="px-4 py-3 text-muted-foreground">
+                      {order.vehicle_name} · ${formatNumber(order.vehicle_price)}
+                    </td>
+                    <td className="px-4 py-3">
+                      <Badge variant={STATUS_BADGE[order.status] ?? 'secondary'}>{order.status}</Badge>
+                    </td>
+                    <td className="px-4 py-3 text-muted-foreground">{formatDate(order.created_at)}</td>
+                    <td className="px-4 py-3 text-right">
+                      <button
+                        onClick={() => onNavigate('orders')}
+                        className="text-muted-foreground transition-colors hover:text-foreground"
+                        aria-label={`View order ${order.id}`}
                       >
                         <ArrowUpRight className="h-4 w-4" />
                       </button>

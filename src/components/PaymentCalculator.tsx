@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { Link } from 'react-router';
 import { motion } from 'motion/react';
-import { BadgeCheck, CreditCard, ShieldCheck } from 'lucide-react';
+import { ArrowRight, BadgeCheck, CreditCard, ShieldCheck } from 'lucide-react';
 import { Button } from './ui/button';
 import { Slider } from './ui/slider';
 import { cn, formatPrice } from '../lib/utils';
+import type { Vehicle } from '../types/vehicle';
 
 const TERMS = [36, 48, 60, 72];
 const APR = 0.069;
@@ -24,8 +26,8 @@ function computeMonthly(price: number, down: number, term: number) {
   return Math.round((principal * r) / (1 - Math.pow(1 + r, -term)));
 }
 
-export function PaymentCalculator() {
-  const [price, setPrice] = useState(42000);
+export function PaymentCalculator({ vehicle }: { vehicle?: Vehicle }) {
+  const [price, setPrice] = useState(vehicle?.price ?? 42000);
   const [down, setDown] = useState(5000);
   const [term, setTerm] = useState(60);
   const monthly = computeMonthly(price, down, term);
@@ -68,7 +70,18 @@ export function PaymentCalculator() {
           </ul>
 
           <div className="mt-9">
-            <Button size="lg">Get Pre-Qualified</Button>
+            {vehicle ? (
+              <Link to={`/checkout/${vehicle.id}?down=${down}&term=${term}`} className="block">
+                <Button size="lg" className="w-full">
+                  Continue to Checkout
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+            ) : (
+              <Button size="lg" onClick={() => document.querySelector('#pre-qualify')?.scrollIntoView({ behavior: 'smooth' })}>
+                Get Pre-Qualified
+              </Button>
+            )}
             <p className="mt-3 text-xs text-[var(--muted-foreground)]">
               Soft credit check only — does not affect your score.
             </p>
@@ -83,15 +96,24 @@ export function PaymentCalculator() {
           className="rounded-2xl border border-[var(--border)] bg-[var(--card-elevated)] p-8 md:p-10"
         >
           <div className="space-y-7">
-            <Slider
-              label="Vehicle price"
-              value={price}
-              min={20000}
-              max={90000}
-              step={100}
-              onChange={setPrice}
-              displayValue={formatPrice(price)}
-            />
+            {vehicle ? (
+              <div className="flex items-baseline justify-between">
+                <span className="text-sm text-[var(--muted-foreground)]">Vehicle price</span>
+                <span className="font-display text-lg font-bold tabular-nums text-[var(--foreground)]">
+                  {formatPrice(vehicle.price)}
+                </span>
+              </div>
+            ) : (
+              <Slider
+                label="Vehicle price"
+                value={price}
+                min={20000}
+                max={90000}
+                step={100}
+                onChange={setPrice}
+                displayValue={formatPrice(price)}
+              />
+            )}
             <Slider
               label="Down payment"
               value={down}
