@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { motion } from 'motion/react';
-import { BadgeCheck, ChevronRight, Gauge, KeyRound, ShieldCheck, ShoppingBag, Zap } from 'lucide-react';
+import { BadgeCheck, ChevronRight, Gauge, KeyRound, ShieldCheck, ShoppingBag } from 'lucide-react';
 import { useSimilar, useVehicle } from '../lib/vehicles';
 import { formatDistance, formatPrice } from '../lib/utils';
 import { Button } from '../components/ui/button';
@@ -81,6 +81,7 @@ export function VehicleDetailPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              className="min-w-0"
             >
               <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-[var(--border)]">
                 <img
@@ -116,6 +117,7 @@ export function VehicleDetailPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+              className="min-w-0"
             >
               <div className="flex items-center gap-3">
                 <span className="rounded-full border border-[var(--primary)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--primary)]">
@@ -152,17 +154,11 @@ export function VehicleDetailPage() {
                 <SpecRow label="MPG" value={vehicle.mpg > 0 ? `${vehicle.mpg} city/hwy` : 'N/A · Electric'} />
               </div>
 
-              <div className="mt-6 space-y-3">
+              <div className="mt-6">
                 <Link to={`/checkout/${vehicle.id}`}>
                   <Button size="lg" className="w-full">
                     <ShoppingBag className="h-4 w-4" />
                     Buy This Vehicle
-                  </Button>
-                </Link>
-                <Link to="/financing">
-                  <Button variant="outline" size="lg" className="w-full">
-                    <Zap className="h-4 w-4" />
-                    Get Pre-Qualified
                   </Button>
                 </Link>
               </div>

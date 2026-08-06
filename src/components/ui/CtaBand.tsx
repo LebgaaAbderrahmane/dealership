@@ -14,7 +14,7 @@ export function CtaBand({ title, subline }: CtaBandProps) {
     >
       <div className="container-apex flex flex-col items-center gap-6 py-16 text-center md:flex-row md:justify-between md:text-left">
         <div>
-          <h2 className="font-display text-3xl font-extrabold tracking-[-0.03em] text-white md:text-4xl">
+          <h2 className="font-display max-w-lg text-3xl font-extrabold tracking-[-0.03em] text-white md:text-4xl">
             {title}
           </h2>
           {subline && <p className="mt-3 max-w-xl font-light text-white/85">{subline}</p>}

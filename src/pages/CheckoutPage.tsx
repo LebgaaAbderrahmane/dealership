@@ -133,7 +133,7 @@ export function CheckoutPage() {
               ) : (
                 <form
                   onSubmit={handleSubmit}
-                  className="rounded-2xl border border-[var(--border)] bg-[var(--card-elevated)] p-8"
+                  className="rounded-2xl border border-[var(--border)] bg-[var(--card-elevated)] p-6 sm:p-8"
                 >
                   <p className="eyebrow mb-2">Your details</p>
                   <h2 className="font-display text-2xl font-bold tracking-[-0.025em] text-[var(--foreground)]">

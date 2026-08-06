@@ -170,7 +170,7 @@ export function PaymentCalculator({ vehicle }: { vehicle?: Vehicle }) {
         </motion.div>
       </div>
 
-      <div className="sticky bottom-0 z-20 mt-8 -mb-16 border-t border-[var(--border)] bg-[var(--card-elevated)]/95 px-6 py-4 backdrop-blur lg:hidden">
+      <div className="mt-8 border-t border-[var(--border)] bg-[var(--card-elevated)]/95 px-6 py-4 backdrop-blur lg:hidden">
         <div className="flex items-center justify-between">
           <div>
             <span className="text-[11px] uppercase tracking-[0.18em] text-[var(--muted-foreground)]">
