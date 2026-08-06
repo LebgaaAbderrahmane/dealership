@@ -47,7 +47,7 @@ export function Service() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.55, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-              className="group rounded-xl border border-[var(--border)] bg-[var(--card)] p-6 transition-colors duration-300 hover:border-[color-mix(in_srgb,var(--primary)_30%,transparent)]"
+              className="group rounded-xl border border-[var(--border)] bg-[var(--card)] p-4 transition-colors duration-300 hover:border-[color-mix(in_srgb,var(--primary)_30%,transparent)] sm:p-6"
             >
               <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--primary)_14%,transparent)] text-[var(--primary)]">
                 <service.icon className="h-5 w-5" />
@@ -74,7 +74,7 @@ export function Service() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-40px' }}
           transition={{ duration: 0.5 }}
-          className="mt-10 flex flex-col items-center gap-3 rounded-xl border border-[var(--border)] bg-[var(--card)] px-6 py-5 text-center sm:flex-row sm:justify-between sm:text-left"
+          className="mt-10 flex flex-col items-center gap-3 rounded-xl border border-[var(--border)] bg-[var(--card)] px-4 py-5 text-center sm:flex-row sm:justify-between sm:text-left"
         >
           <p className="text-sm font-light text-[var(--muted-foreground)]">
             <span className="font-display font-bold text-[var(--foreground)]">Service hours:</span>{' '}

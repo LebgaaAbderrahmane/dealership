@@ -145,7 +145,7 @@ export function VehicleDetailPage() {
                 {vehicle.description}
               </p>
 
-              <div className="mt-6 rounded-xl border border-[var(--border)] bg-[var(--card)] px-5 py-2">
+              <div className="mt-6 rounded-xl border border-[var(--border)] bg-[var(--card)] px-4 py-2">
                 <SpecRow label="Mileage" value={formatDistance(vehicle.miles)} />
                 <SpecRow label="Drivetrain" value={vehicle.drivetrain} />
                 <SpecRow label="Transmission" value={vehicle.transmission} />
@@ -188,7 +188,7 @@ export function VehicleDetailPage() {
             <h2 className="font-display text-2xl font-bold tracking-[-0.025em] text-[var(--foreground)] md:text-3xl">
               Every Detail, in the Open
             </h2>
-            <div className="mt-6 rounded-xl border border-[var(--border)] bg-[var(--card)] px-5 py-2">
+            <div className="mt-6 rounded-xl border border-[var(--border)] bg-[var(--card)] px-4 py-2">
               <SpecRow label="Make" value={vehicle.make} />
               <SpecRow label="Model year" value={String(vehicle.year)} />
               <SpecRow label="Body style" value={vehicle.type} />
@@ -221,7 +221,7 @@ export function VehicleDetailPage() {
                 </span>
               ))}
             </div>
-            <div className="mt-8 flex items-start gap-3 rounded-xl border border-[var(--border)] bg-[var(--card)] p-5 text-sm font-light text-[var(--muted-foreground)]">
+            <div className="mt-8 flex items-start gap-3 rounded-xl border border-[var(--border)] bg-[var(--card)] p-4 text-sm font-light text-[var(--muted-foreground)]">
               <Gauge className="mt-0.5 h-5 w-5 shrink-0 text-[var(--primary)]" />
               <span>
                 Advertised payment is an estimate based on {formatPrice(vehicle.price)}{' '}

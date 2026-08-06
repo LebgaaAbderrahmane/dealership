@@ -165,7 +165,7 @@ export function FinancingPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-            className="rounded-2xl border border-[var(--border)] bg-[var(--card-elevated)] p-8"
+            className="rounded-2xl border border-[var(--border)] bg-[var(--card-elevated)] p-4 sm:p-8"
           >
             {status === 'success' ? (
               <FormSuccess

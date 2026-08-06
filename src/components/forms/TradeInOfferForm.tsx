@@ -76,7 +76,7 @@ export function TradeInOfferForm() {
         initial={{ opacity: 0, scale: 0.97 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        className="rounded-2xl border border-[var(--border)] bg-[var(--card-elevated)] p-8 text-center"
+        className="rounded-2xl border border-[var(--border)] bg-[var(--card-elevated)] p-4 text-center sm:p-8"
       >
         <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--success)_15%,transparent)]">
           <BadgeDollarSign className="h-6 w-6 text-[var(--success)]" />
@@ -108,7 +108,7 @@ export function TradeInOfferForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-2xl border border-[var(--border)] bg-[var(--card-elevated)] p-8"
+      className="rounded-2xl border border-[var(--border)] bg-[var(--card-elevated)] p-4 sm:p-8"
     >
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Year">

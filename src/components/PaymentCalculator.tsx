@@ -93,7 +93,7 @@ export function PaymentCalculator({ vehicle }: { vehicle?: Vehicle }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-          className="rounded-2xl border border-[var(--border)] bg-[var(--card-elevated)] p-8 md:p-10"
+          className="rounded-2xl border border-[var(--border)] bg-[var(--card-elevated)] p-4 sm:p-8 md:p-10"
         >
           <div className="space-y-7">
             {vehicle ? (
@@ -170,7 +170,7 @@ export function PaymentCalculator({ vehicle }: { vehicle?: Vehicle }) {
         </motion.div>
       </div>
 
-      <div className="mt-8 border-t border-[var(--border)] bg-[var(--card-elevated)]/95 px-6 py-4 backdrop-blur lg:hidden">
+      <div className="mt-8 border-t border-[var(--border)] bg-[var(--card-elevated)]/95 px-4 py-4 backdrop-blur lg:hidden">
         <div className="flex items-center justify-between">
           <div>
             <span className="text-[11px] uppercase tracking-[0.18em] text-[var(--muted-foreground)]">

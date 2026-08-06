@@ -12,6 +12,7 @@ const NAV_LINKS = [
   { label: 'Trade-In', to: '/trade-in' },
   { label: 'Service', to: '/service' },
   { label: 'About', to: '/about' },
+  { label: 'Contact', to: '/contact' },
 ];
 
 function Wordmark() {

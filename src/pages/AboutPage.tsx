@@ -102,7 +102,7 @@ export function AboutPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.45, delay: i * 0.08 }}
-              className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 text-center"
+                className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4 text-center sm:p-6"
             >
               <p className="font-display text-3xl font-extrabold tabular-nums text-[var(--primary)] md:text-4xl">
                 {stat.value}
@@ -137,7 +137,7 @@ export function AboutPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
                 transition={{ duration: 0.55, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-                className="rounded-2xl border border-[var(--border)] bg-[var(--background)] p-7"
+                className="rounded-2xl border border-[var(--border)] bg-[var(--background)] p-4 sm:p-7"
               >
                 <value.icon className="h-6 w-6 text-[var(--primary)]" />
                 <h3 className="mt-4 font-display text-lg font-bold text-[var(--foreground)]">
@@ -168,7 +168,7 @@ export function AboutPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
-                className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 text-center"
+              className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4 text-center sm:p-6"
               >
                 <span className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--primary)_15%,transparent)] font-display text-xl font-extrabold text-[var(--primary)]">
                   {member.initials}

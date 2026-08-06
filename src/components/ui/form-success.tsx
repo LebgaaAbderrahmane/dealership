@@ -18,7 +18,7 @@ export function FormSuccess({
       initial={{ opacity: 0, scale: 0.96 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
-      className="flex flex-col items-center rounded-2xl border border-[var(--success)]/40 bg-[color-mix(in_srgb,var(--success)_8%,transparent)] p-8 text-center"
+      className="flex flex-col items-center rounded-2xl border border-[var(--success)]/40 bg-[color-mix(in_srgb,var(--success)_8%,transparent)] p-4 text-center sm:p-8"
     >
       <CheckCircle2 className="h-12 w-12 text-[var(--success)]" />
       <h3 className="mt-4 font-display text-lg font-bold text-[var(--foreground)]">{title}</h3>

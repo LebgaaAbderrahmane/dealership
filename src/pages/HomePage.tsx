@@ -7,6 +7,7 @@ import { TradeIn } from '../components/TradeIn';
 import { Process } from '../components/Process';
 import { Service } from '../components/Service';
 import { Reviews } from '../components/Reviews';
+import { HomeContact } from '../components/HomeContact';
 import { FinalCTA } from '../components/FinalCTA';
 import { DEFAULT_FILTERS, type VehicleFilters } from '../lib/filters';
 
@@ -28,6 +29,7 @@ export function HomePage() {
       <Service />
       <Reviews />
       <FinalCTA />
+      <HomeContact />
     </>
   );
 }

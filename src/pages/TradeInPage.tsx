@@ -63,7 +63,7 @@ export function TradeInPage() {
               ))}
             </div>
 
-            <div className="mt-10 rounded-xl border border-[var(--border)] bg-[var(--card)] p-6 text-sm font-light text-[var(--muted-foreground)]">
+            <div className="mt-10 rounded-xl border border-[var(--border)] bg-[var(--card)] p-4 text-sm font-light text-[var(--muted-foreground)] sm:p-6">
               <span className="font-display font-bold text-[var(--foreground)]">
                 The fine print, upfront:
               </span>{' '}

@@ -156,7 +156,7 @@ export function ServicePage() {
                     e,
                   );
                 }}
-                className="rounded-2xl border border-[var(--border)] bg-[var(--card-elevated)] p-8"
+                className="rounded-2xl border border-[var(--border)] bg-[var(--card-elevated)] p-4 sm:p-8"
               >
                 <div className="grid gap-5 sm:grid-cols-2">
                   <Field label="Your name">

@@ -81,7 +81,7 @@ export function Hero({ onSearch }: HeroProps) {
           transition={{ duration: 0.7, delay: 0.65, ease: [0.22, 1, 0.36, 1] }}
           className="mt-14 w-full"
         >
-          <dl className="grid w-full grid-cols-2 gap-y-8 rounded-2xl border border-[var(--border)] bg-white/[0.04] px-6 py-8 backdrop-blur-xl sm:grid-cols-4 lg:px-10">
+          <dl className="grid w-full grid-cols-2 gap-y-8 rounded-2xl border border-[var(--border)] bg-white/[0.04] px-4 py-8 backdrop-blur-xl sm:grid-cols-4 lg:px-10">
             {settings.hero.stats.map((s) => (
               <div key={s.label} className="text-center">
                 <dd className="font-display text-3xl font-extrabold tracking-tight text-[var(--foreground)] md:text-[40px] md:leading-none">

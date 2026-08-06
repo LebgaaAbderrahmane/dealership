@@ -133,7 +133,7 @@ export function CheckoutPage() {
               ) : (
                 <form
                   onSubmit={handleSubmit}
-                  className="rounded-2xl border border-[var(--border)] bg-[var(--card-elevated)] p-6 sm:p-8"
+                  className="rounded-2xl border border-[var(--border)] bg-[var(--card-elevated)] p-4 sm:p-8"
                 >
                   <p className="eyebrow mb-2">Your details</p>
                   <h2 className="font-display text-2xl font-bold tracking-[-0.025em] text-[var(--foreground)]">
@@ -217,7 +217,7 @@ export function CheckoutPage() {
                 <div className="aspect-[16/10] overflow-hidden bg-[var(--card-elevated)]">
                   <img src={vehicle.image} alt={vehicle.name} className="h-full w-full object-cover" />
                 </div>
-                <div className="p-6">
+                <div className="p-4 md:p-6">
                   <div className="flex items-center gap-2">
                     <span className="rounded-full border border-[var(--primary)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--primary)]">
                       {vehicle.badge}

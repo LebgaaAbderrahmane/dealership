@@ -53,36 +53,41 @@ export function ContactPage() {
 
       <section className="bg-[var(--background)] py-16 md:py-24">
         <div className="container-apex">
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {cards.map((card, i) => (              <motion.div
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {cards.map((card, i) => (
+              <motion.div
                 key={card.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
                 transition={{ duration: 0.45, delay: i * 0.08 }}
-                className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6"
+                className="rounded-2xl border border-[var(--border)] bg-[var(--card-elevated)] p-4 sm:p-6"
               >
-                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--primary)_14%,transparent)] text-[var(--primary)]">
-                  <card.icon className="h-5 w-5" />
-                </span>
-                <h3 className="mt-4 font-display text-base font-bold text-[var(--foreground)]">
-                  {card.title}
-                </h3>
-                {card.lines.map((line) =>
-                  card.href && line.includes('@') ? (
-                    <a key={line} href={`mailto:${line}`} className="block text-sm text-[var(--muted-foreground)] hover:text-[var(--primary)]">
-                      {line}
-                    </a>
-                  ) : card.href && line.startsWith('+213') ? (
-                    <a key={line} href={card.href} className="block text-sm text-[var(--muted-foreground)] hover:text-[var(--primary)]">
-                      {line}
-                    </a>
-                  ) : (
-                    <p key={line} className="block text-sm text-[var(--muted-foreground)]">
-                      {line}
-                    </p>
-                  ),
-                )}
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 className="font-display text-base font-bold text-[var(--foreground)]">
+                      {card.title}
+                    </h3>
+                    {card.lines.map((line) =>
+                      card.href && line.includes('@') ? (
+                        <a key={line} href={`mailto:${line}`} className="block text-sm text-[var(--muted-foreground)] hover:text-[var(--primary)]">
+                          {line}
+                        </a>
+                      ) : card.href && line.startsWith('+213') ? (
+                        <a key={line} href={card.href} className="block text-sm text-[var(--muted-foreground)] hover:text-[var(--primary)]">
+                          {line}
+                        </a>
+                      ) : (
+                        <p key={line} className="block text-sm text-[var(--muted-foreground)]">
+                          {line}
+                        </p>
+                      ),
+                    )}
+                  </div>
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--primary)_14%,transparent)] text-[var(--primary)]">
+                    <card.icon className="h-5 w-5" />
+                  </span>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -90,12 +95,13 @@ export function ContactPage() {
       </section>
 
       <section className="border-y border-[var(--border)] bg-[var(--card)] py-16 md:py-24">
-        <div className="container-apex grid items-start gap-12 lg:grid-cols-2">
+        <div className="container-apex grid gap-12 lg:grid-cols-2">
           <motion.div
             initial={{ opacity: 0, y: 28 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="flex flex-col"
           >
             <p className="eyebrow mb-3">Send a message</p>
             <h2 className="font-display text-3xl font-bold tracking-[-0.025em] text-[var(--foreground)] md:text-[44px] md:leading-none">
@@ -105,11 +111,11 @@ export function ContactPage() {
               Tell us what you're looking for and a specialist will get back to you —
               usually within the hour.
             </p>
-            <div className="mt-8 overflow-hidden rounded-2xl border border-[var(--border)]">
+            <div className="mt-8 flex-1 overflow-hidden rounded-2xl border border-[var(--border)]">
               <iframe
                 title="Apex Motors location map"
                 src="https://maps.google.com/maps?q=Bordj%20El%20Kiffan%2C%20Algiers%2C%20Algeria&z=14&output=embed"
-                className="h-[320px] w-full border-0 grayscale-[0.3]"
+                className="h-64 w-full border-0 grayscale-[0.3] lg:h-full"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />
@@ -121,6 +127,7 @@ export function ContactPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            className="flex flex-col"
           >
             {status === 'success' ? (
               <FormSuccess
@@ -144,7 +151,7 @@ export function ContactPage() {
                     e,
                   );
                 }}
-                className="rounded-2xl border border-[var(--border)] bg-[var(--card-elevated)] p-8"
+                className="flex-1 rounded-2xl border border-[var(--border)] bg-[var(--card-elevated)] p-4 sm:p-8"
               >
                 <div className="grid gap-5 sm:grid-cols-2">
                   <Field label="Your name">
