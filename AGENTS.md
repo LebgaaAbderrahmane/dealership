@@ -12,7 +12,7 @@
 - Checkout: `POST /api/orders` is public, Zod-validated, re-fetches the vehicle for a snapshot (404 if missing), stores `payload` JSON + snapshot fields (vehicle_name/price/image). No payment taken. Admin: `GET /api/admin/orders`, `PATCH /api/admin/orders/:id/status` (statuses `new | contacted | closed | cancelled`). `/api/admin/stats` includes `orders:{total,new,contacted,closed,cancelled}` + `recentOrders:[5]`.
 - Frontend `useSiteSettings()` hook: cached `GET /api/settings`, falls back to `DEFAULT_SETTINGS` in `src/data/settings.ts` (mirror of server defaults) when API is down.
 - Checkout frontend: `useSubmitOrder()` hook (mirrors `useSubmitLead`), `CheckoutPage` at `/checkout/:id` (order summary + Cash/Financing form, financing reveals down payment + term + estimated payment at 6.9% APR), "Buy This Vehicle" CTA on `VehicleDetailPage`.
-- Committed+pushed to `main` up to `d27e8ed` (checkout, admin sidebar/dashboard/orders, home contact + filter-bar refinements). **BrandStrip + settings.trust removal is uncommitted.**
+- Committed+pushed to `main` up to `afce929` (BrandStrip marquee + `settings.trust` removal). **Hero mobile-center/full-width buttons is uncommitted.**
 - README rewrite request remains deferred by the user.
 - Remaining hardcoded copy (About, Reviews, FinalCTA, CtaBand, Privacy/Accessibility legal pages, VehicleDetailPage badges) is OUT of the approved settings scope and intentionally left as-is.
 - Servers verified live: API :3001 (tsx watch), Vite :5173, CDP Chrome :9223. Admin token stored in localStorage key `apex_admin_token`.

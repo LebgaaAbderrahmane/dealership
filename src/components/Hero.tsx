@@ -4,7 +4,7 @@ import { HERO_IMAGE } from '../data/inventory';
 import { useSiteSettings } from '../lib/settings';
 import { Button } from './ui/button';
 
-const HERO_LINES = ['Find it. Finance it.', 'Drive it home', 'today.'];
+const HERO_LINES = ['Find it. Buy it.', 'Drive it home', 'today.'];
 
 interface HeroProps {
   onSearch: () => void;
@@ -27,7 +27,7 @@ export function Hero({ onSearch }: HeroProps) {
         }}
       />
 
-      <div className="container-apex relative pt-[110px] pb-20 md:pl-16">
+      <div className="container-apex relative pt-[110px] pb-20 text-center md:pl-16 md:text-left">
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -37,7 +37,7 @@ export function Hero({ onSearch }: HeroProps) {
           {settings.hero.eyebrow}
         </motion.p>
 
-        <h1 className="max-w-3xl font-display font-extrabold leading-none tracking-[-0.035em] text-[var(--foreground)] [font-size:clamp(40px,5.6vw,88px)]">
+        <h1 className="mx-auto max-w-3xl font-display font-extrabold leading-none tracking-[-0.035em] text-[var(--foreground)] [font-size:clamp(40px,5.6vw,88px)] md:mx-0">
           {HERO_LINES.map((line, i) => (
             <motion.span
               key={line}
@@ -55,7 +55,7 @@ export function Hero({ onSearch }: HeroProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.75, delay: 0.45 }}
-          className="mt-6 max-w-xl text-base font-light text-[color-mix(in_srgb,var(--foreground)_80%,transparent)] md:text-lg"
+          className="mx-auto mt-6 max-w-xl text-base font-light text-[color-mix(in_srgb,var(--foreground)_80%,transparent)] md:mx-0 md:text-lg"
         >
           {settings.hero.subline}
         </motion.p>
@@ -64,13 +64,13 @@ export function Hero({ onSearch }: HeroProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.75, delay: 0.55 }}
-          className="mt-9 flex flex-wrap items-center gap-4"
+          className="mt-9 flex flex-col items-stretch gap-3 md:flex-row md:items-center md:gap-4"
         >
-          <Button size="lg" onClick={onSearch}>
+          <Button size="lg" className="w-full md:w-auto" onClick={onSearch}>
             Browse Inventory
             <ArrowRight className="h-4 w-4" />
           </Button>
-          <Button size="lg" variant="ghost" onClick={() => document.querySelector('#trade-in')?.scrollIntoView({ behavior: 'smooth' })}>
+          <Button size="lg" variant="ghost" className="w-full md:w-auto" onClick={() => document.querySelector('#trade-in')?.scrollIntoView({ behavior: 'smooth' })}>
             Value My Trade
           </Button>
         </motion.div>
