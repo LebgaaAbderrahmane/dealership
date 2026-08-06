@@ -19,11 +19,6 @@ export interface HeroStat {
   label: string;
 }
 
-export interface TrustItem {
-  label: string;
-  sub: string;
-}
-
 export interface SocialSettings {
   instagram: string;
   facebook: string;
@@ -39,7 +34,6 @@ export interface SiteSettings {
     subline: string;
     stats: HeroStat[];
   };
-  trust: TrustItem[];
   social: SocialSettings;
   footer: {
     blurb: string;
@@ -72,12 +66,6 @@ export const DEFAULT_SETTINGS: SiteSettings = {
       { value: '4.8★', label: 'Buyer rating' },
     ],
   },
-  trust: [
-    { label: 'No-haggle pricing', sub: 'The price online is the price you pay.' },
-    { label: '7-day return policy', sub: 'Drive it, and still change your mind.' },
-    { label: '172-point inspection', sub: 'Every vehicle, certified before sale.' },
-    { label: '4.8★ from 2,100+ reviews', sub: 'Rated by real buyers in Algiers.' },
-  ],
   social: {
     instagram: '',
     facebook: '',

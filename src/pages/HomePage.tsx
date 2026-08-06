@@ -1,5 +1,5 @@
 import { Hero } from '../components/Hero';
-import { TrustStrip } from '../components/TrustStrip';
+import { BrandStrip } from '../components/BrandStrip';
 import { Inventory } from '../components/Inventory';
 import { PaymentCalculator } from '../components/PaymentCalculator';
 import { TradeIn } from '../components/TradeIn';
@@ -17,7 +17,7 @@ export function HomePage() {
   return (
     <>
       <Hero onSearch={scrollToInventory} />
-      <TrustStrip />
+      <BrandStrip />
       <Inventory />
       <PaymentCalculator />
       <TradeIn />

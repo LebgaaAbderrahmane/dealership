@@ -33,7 +33,6 @@ const INITIAL_DRAFT = (s: SiteSettings): SiteSettings => ({
   dealer: { ...s.dealer },
   hours: { ...s.hours },
   hero: { ...s.hero, stats: s.hero.stats.map((x) => ({ ...x })) },
-  trust: s.trust.map((x) => ({ ...x })),
   social: { ...s.social },
   footer: { ...s.footer },
 });
@@ -72,9 +71,6 @@ export function SettingsTab() {
           }
         : d,
     );
-
-  const updateTrust = (i: number, key: 'label' | 'sub', value: string) =>
-    setDraft((d) => (d ? { ...d, trust: d.trust.map((t, j) => (j === i ? { ...t, [key]: value } : t)) } : d));
 
   const updateSocial = (key: keyof SiteSettings['social'], value: string) =>
     setDraft((d) => (d ? { ...d, social: { ...d.social, [key]: value } } : d));
@@ -177,25 +173,6 @@ export function SettingsTab() {
               <Field label={`Stat ${i + 1} — label`}>
                 <Input value={stat.label} onChange={(e) => updateHeroStat(i, 'label', e.target.value)} />
               </Field>
-            </div>
-          </div>
-        ))}
-      </Section>
-
-      <Section title="Trust strip" description="The four trust badges shown under the homepage hero.">
-        {draft.trust.map((item, i) => (
-          <div key={i} className="contents">
-            <div className="flex items-end gap-2">
-              <div className="flex-1">
-                <Field label={`Badge ${i + 1} — title`}>
-                  <Input value={item.label} onChange={(e) => updateTrust(i, 'label', e.target.value)} />
-                </Field>
-              </div>
-              <div className="flex-[2]">
-                <Field label={`Badge ${i + 1} — detail`}>
-                  <Input value={item.sub} onChange={(e) => updateTrust(i, 'sub', e.target.value)} />
-                </Field>
-              </div>
             </div>
           </div>
         ))}
