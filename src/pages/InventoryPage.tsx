@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useSearchParams } from 'react-router';
-import { Filter, Search, SlidersHorizontal } from 'lucide-react';
+import { ChevronDown, Filter, Search, SlidersHorizontal, X } from 'lucide-react';
 import { VEHICLE_MAKES, VEHICLE_TYPES } from '../types/vehicle';
 import { useMeta, useVehicles } from '../lib/vehicles';
-import { formatPrice } from '../lib/utils';
+import { cn, formatPrice } from '../lib/utils';
 import { PageHero } from '../components/ui/PageHero';
 import { HERO_IMAGE } from '../data/inventory';
 import { ChipSelect } from '../components/ui/chip-select';
@@ -37,8 +37,24 @@ export function InventoryPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [visible, setVisible] = useState(PAGE_SIZE);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [priceOpen, setPriceOpen] = useState(false);
   const [sort, setSort] = useState('featured');
+  const priceRef = useRef<HTMLDivElement>(null);
   const meta = useMeta();
+
+  useEffect(() => {
+    if (!priceOpen) return;
+    const onDown = (e: PointerEvent) => {
+      if (priceRef.current && !priceRef.current.contains(e.target as Node)) setPriceOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setPriceOpen(false);
+    document.addEventListener('pointerdown', onDown);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('pointerdown', onDown);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [priceOpen]);
 
   const type = searchParams.get('type') ?? 'All';
   const make = searchParams.get('make') ?? 'All';
@@ -59,6 +75,14 @@ export function InventoryPage() {
     setVisible(PAGE_SIZE);
   };
 
+  const hasActiveFilters =
+    type !== 'All' || make !== 'All' || maxPrice !== 90000 || maxMonthly !== 10000 || query !== '';
+
+  const clearFilters = () => {
+    setSearchParams({});
+    setVisible(PAGE_SIZE);
+  };
+
   const { vehicles: shown, total, loading } = useVehicles({
     type,
     make,
@@ -76,15 +100,25 @@ export function InventoryPage() {
   const filterBar = (
     <>
       <div className="hidden flex-wrap items-center gap-3 lg:flex">
-        <div className="relative w-full max-w-[220px]">
+        <div className="relative min-w-[200px] flex-1">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted-foreground)]" />
           <input
             type="text"
             value={query}
             onChange={(e) => update({ q: e.target.value })}
             placeholder="Search cars"
-            className="h-9 w-full rounded-full border border-[var(--border)] bg-[var(--card)] pl-9 pr-4 text-sm text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus:border-[var(--primary)] focus:outline-none"
+            className="h-9 w-full rounded-full border border-[var(--border)] bg-[var(--card)] pl-9 pr-9 text-sm text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus:border-[var(--primary)] focus:outline-none"
           />
+          {query && (
+            <button
+              type="button"
+              aria-label="Clear search"
+              onClick={() => update({ q: '' })}
+              className="absolute right-2 top-1/2 flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded-full text-[var(--muted-foreground)] transition-colors hover:bg-[var(--border)] hover:text-[var(--foreground)]"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          )}
         </div>
         <ChipSelect
           ariaLabel="Type"
@@ -98,16 +132,45 @@ export function InventoryPage() {
           options={makeOptions}
           onChange={(v) => update({ make: v })}
         />
-        <div className="hidden w-full max-w-[240px] lg:block">
-          <Slider
-            label="Max price"
-            value={maxPrice}
-            min={20000}
-            max={90000}
-            step={500}
-            onChange={(v) => update({ maxPrice: String(v) })}
-            displayValue={formatPrice(maxPrice)}
-          />
+        <div ref={priceRef} className="relative hidden lg:block">
+          <button
+            type="button"
+            aria-label="Max price"
+            onClick={() => setPriceOpen((o) => !o)}
+            className={cn(
+              'inline-flex h-9 items-center gap-2 rounded-full border px-4 text-sm font-medium text-[var(--foreground)] transition-colors',
+              priceOpen
+                ? 'border-[var(--primary)] bg-[var(--card)]'
+                : 'border-[var(--border)] bg-[var(--card)] hover:border-[color-mix(in_srgb,var(--primary)_50%,transparent)]',
+            )}
+          >
+            <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--muted-foreground)]">
+              Price
+            </span>
+            <span>{maxPrice >= 90000 ? 'Any' : formatPrice(maxPrice)}</span>
+            <ChevronDown className="h-3.5 w-3.5 text-[var(--muted-foreground)]" />
+          </button>
+          <AnimatePresence>
+            {priceOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: 6, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 6, scale: 0.98 }}
+                transition={{ duration: 0.15, ease: 'easeOut' }}
+                className="absolute left-0 top-full z-50 mt-2 w-72 rounded-xl border border-[var(--border)] bg-[var(--card-elevated)] p-5 shadow-[0_20px_60px_-12px_rgba(0,0,0,0.8)]"
+              >
+                <Slider
+                  label="Max price"
+                  value={maxPrice}
+                  min={20000}
+                  max={90000}
+                  step={500}
+                  onChange={(v) => update({ maxPrice: String(v) })}
+                  displayValue={formatPrice(maxPrice)}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
         <div className="ml-auto">
           <ChipSelect
@@ -117,9 +180,19 @@ export function InventoryPage() {
             onChange={setSort}
           />
         </div>
-        <span className="w-full text-sm text-[var(--muted-foreground)] lg:w-auto lg:min-w-[6rem] lg:text-right">
+        <span className="w-full text-sm font-semibold tabular-nums text-[var(--foreground)] lg:w-auto lg:min-w-[6rem] lg:text-right">
           {total} vehicles
         </span>
+        {hasActiveFilters && (
+          <button
+            type="button"
+            onClick={clearFilters}
+            className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full px-3 text-sm font-semibold text-[var(--primary)] transition-colors hover:bg-[color-mix(in_srgb,var(--primary)_12%,transparent)]"
+          >
+            <X className="h-3.5 w-3.5" />
+            Clear filters
+          </button>
+        )}
       </div>
 
       <div className="flex items-center gap-3 lg:hidden">
@@ -130,8 +203,18 @@ export function InventoryPage() {
             value={query}
             onChange={(e) => update({ q: e.target.value })}
             placeholder="Search cars"
-            className="h-9 w-full rounded-full border border-[var(--border)] bg-[var(--card)] pl-9 pr-4 text-sm text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus:border-[var(--primary)] focus:outline-none"
+            className="h-9 w-full rounded-full border border-[var(--border)] bg-[var(--card)] pl-9 pr-9 text-sm text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus:border-[var(--primary)] focus:outline-none"
           />
+          {query && (
+            <button
+              type="button"
+              aria-label="Clear search"
+              onClick={() => update({ q: '' })}
+              className="absolute right-2 top-1/2 flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded-full text-[var(--muted-foreground)] transition-colors hover:bg-[var(--border)] hover:text-[var(--foreground)]"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          )}
         </div>
         <button
           type="button"
@@ -238,6 +321,11 @@ export function InventoryPage() {
           <Button className="w-full py-4" onClick={() => setSheetOpen(false)}>
             Show {total} vehicles
           </Button>
+          {hasActiveFilters && (
+            <Button variant="ghost" className="w-full" onClick={clearFilters}>
+              Clear filters
+            </Button>
+          )}
         </div>
       </Drawer>
     </>
