@@ -83,6 +83,10 @@ const leadStatusSchema = z.object({
   status: z.enum(['new', 'contacted', 'done']),
 });
 
+const orderStatusSchema = z.object({
+  status: z.enum(['new', 'contacted', 'closed', 'cancelled']),
+});
+
 export const adminRouter = Router();
 adminRouter.use(requireAuth);
 
@@ -133,7 +137,21 @@ adminRouter.get('/stats', async (_req, res, next) => {
     const recent = await query(
       'SELECT id, kind, name, status, created_at FROM leads ORDER BY created_at DESC LIMIT 5',
     );
+    const recentOrders = await query(
+      `SELECT id, vehicle_name, vehicle_price, name, status, created_at
+       FROM orders ORDER BY created_at DESC LIMIT 5`,
+    );
+    const [orderAgg] = await pool.query<RowDataPacket[]>(
+      `SELECT
+         COUNT(*) AS total,
+         SUM(status = 'new') AS new,
+         SUM(status = 'contacted') AS contacted,
+         SUM(status = 'closed') AS closed,
+         SUM(status = 'cancelled') AS cancelled
+       FROM orders`,
+    );
     const row = leadAgg[0] as { total: number; new: number; contacted: number; done: number };
+    const orderRow = orderAgg[0] as { total: number; new: number; contacted: number; closed: number; cancelled: number };
     res.json({
       vehicles: { total: Number(vehicleRows[0].n) },
       leads: {
@@ -143,7 +161,15 @@ adminRouter.get('/stats', async (_req, res, next) => {
         done: Number(row.done),
         byKind: Object.fromEntries(byKindRows.map((r) => [r.kind, Number(r.n)])),
       },
+      orders: {
+        total: Number(orderRow.total),
+        new: Number(orderRow.new),
+        contacted: Number(orderRow.contacted),
+        closed: Number(orderRow.closed),
+        cancelled: Number(orderRow.cancelled),
+      },
       recent,
+      recentOrders,
     });
   } catch (err) {
     next(err);
@@ -320,6 +346,43 @@ adminRouter.patch('/leads/:id/status', async (req, res, next) => {
     const [result] = await pool.query('UPDATE leads SET status = ? WHERE id = ?', [parsed.data.status, id]);
     if (Number((result as ResultSetHeader).affectedRows) === 0) {
       res.status(404).json({ error: 'Lead not found' });
+      return;
+    }
+    res.json({ ok: true, id });
+  } catch (err) {
+    next(err);
+  }
+});
+
+adminRouter.get('/orders', async (_req, res, next) => {
+  try {
+    const rows = await query(
+      `SELECT id, vehicle_id, vehicle_name, vehicle_price, vehicle_image,
+              name, phone, email, finance, down_payment, term_months, trade_in,
+              notes, payload, status, created_at
+       FROM orders ORDER BY created_at DESC LIMIT 500`,
+    );
+    res.json({ orders: rows });
+  } catch (err) {
+    next(err);
+  }
+});
+
+adminRouter.patch('/orders/:id/status', async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id)) {
+      res.status(400).json({ error: 'Invalid order id' });
+      return;
+    }
+    const parsed = orderStatusSchema.safeParse(req.body);
+    if (!parsed.success) {
+      res.status(400).json({ error: 'Invalid status' });
+      return;
+    }
+    const [result] = await pool.query('UPDATE orders SET status = ? WHERE id = ?', [parsed.data.status, id]);
+    if (Number((result as ResultSetHeader).affectedRows) === 0) {
+      res.status(404).json({ error: 'Order not found' });
       return;
     }
     res.json({ ok: true, id });

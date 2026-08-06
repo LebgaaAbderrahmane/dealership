@@ -55,6 +55,25 @@ CREATE TABLE IF NOT EXISTS settings (
   value JSON NOT NULL,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS orders (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  vehicle_id INT NOT NULL,
+  vehicle_name VARCHAR(160) NOT NULL,
+  vehicle_price INT NOT NULL,
+  vehicle_image VARCHAR(500) DEFAULT NULL,
+  name VARCHAR(120) NOT NULL,
+  phone VARCHAR(40) NOT NULL,
+  email VARCHAR(160) NOT NULL,
+  finance ENUM('cash', 'financing') NOT NULL DEFAULT 'cash',
+  down_payment INT DEFAULT NULL,
+  term_months INT DEFAULT NULL,
+  trade_in VARCHAR(500) DEFAULT NULL,
+  notes TEXT DEFAULT NULL,
+  payload JSON NOT NULL,
+  status ENUM('new', 'contacted', 'closed', 'cancelled') NOT NULL DEFAULT 'new',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 `;
 
 interface SeedVehicle {

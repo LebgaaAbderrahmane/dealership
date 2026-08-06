@@ -6,6 +6,7 @@ import { leadsRouter } from './routes/leads';
 import { authRouter } from './routes/auth';
 import { adminRouter } from './routes/admin';
 import { settingsRouter } from './routes/settings';
+import { ordersRouter } from './routes/orders';
 
 export function createApp() {
   const app = express();
@@ -23,6 +24,7 @@ export function createApp() {
   app.use('/api/auth', authRouter);
   app.use('/api/admin', adminRouter);
   app.use('/api/settings', settingsRouter);
+  app.use('/api/orders', ordersRouter);
 
   app.use((err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
     console.error(err);
