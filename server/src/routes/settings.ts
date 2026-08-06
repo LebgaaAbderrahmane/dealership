@@ -6,7 +6,6 @@ import { requireAuth } from '../middleware/auth';
 import { DEFAULT_SETTINGS, SETTING_KEYS } from '../settings-defaults';
 
 const statSchema = z.object({ value: z.string().max(40), label: z.string().max(80) });
-const trustItemSchema = z.object({ label: z.string().min(1).max(120), sub: z.string().max(240) });
 
 const str = (max: number) => z.string().max(max);
 
@@ -36,7 +35,6 @@ const settingsSchema = z.object({
       stats: z.array(statSchema).max(8),
     })
     .partial(),
-  trust: z.array(trustItemSchema).max(8),
   social: z
     .object({
       instagram: str(300),
