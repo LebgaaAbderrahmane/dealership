@@ -13,25 +13,50 @@ export type { VehicleType, VehicleMake, VehicleBadge, Vehicle };
 const img = (id: string, w = 1200) =>
   `https://images.unsplash.com/photo-${id}?q=80&w=${w}&auto=format&fit=crop`;
 
-const PHOTO_POOL = [
+const SEDAN_PHOTOS = [
   '1503376780353-7e6692767b70',
   '1555215695-3004980ad54e',
   '1618843479313-40f8afb4b4d8',
-  '1605559424843-9e4c228bf1c2',
-  '1552519507-da3b142c6e3d',
-  '1583121274602-3e2820c69888',
-  '1553440569-bcc63803a83d',
-  '1494976388531-d1058494cdd8',
-  '1519641471654-76ce0107ad1b',
-  '1493238792000-8113da705763',
-  '1542362567-b07e54358753',
-  '1533473359331-0135ef1b58bf',
   '1449965408869-eaa3f722e40d',
-  '1607860108855-64acf2078ed9',
-  '1502877338535-766e1452684a',
-  '1549317661-bd32c8ce0db2',
   '1580273916550-e323be2ae537',
 ] as const;
+
+const SUV_PHOTOS = [
+  '1552519507-da3b142c6e3d',
+  '1583121274602-3e2820c69888',
+  '1519641471654-76ce0107ad1b',
+  '1533473359331-0135ef1b58bf',
+  '1549317661-bd32c8ce0db2',
+] as const;
+
+const TRUCK_PHOTOS = [
+  '1605559424843-9e4c228bf1c2',
+  '1593941707882-a5bba14938c7',
+  '1617469767053-d3b523a0b982',
+  '1544636331-e26879cd4d9b',
+] as const;
+
+const EV_PHOTOS = [
+  '1616422285623-13ff0162193c',
+  '1560958089-b8a1929cea89',
+  '1619682817481-e994891cd1f5',
+  '1609521263047-f8f205293f24',
+] as const;
+
+const COUPE_PHOTOS = [
+  '1553440569-bcc63803a83d',
+  '1494976388531-d1058494cdd8',
+  '1502877338535-766e1452684a',
+  '1546614506-1f23c3dfaa4e',
+] as const;
+
+const TYPE_PHOTOS: Record<VehicleType, readonly string[]> = {
+  Sedan: SEDAN_PHOTOS,
+  SUV: SUV_PHOTOS,
+  Truck: TRUCK_PHOTOS,
+  EV: EV_PHOTOS,
+  Coupe: COUPE_PHOTOS,
+};
 
 export const HERO_IMAGE =
   'https://images.unsplash.com/photo-1493238792000-8113da705763?q=80&w=2400&auto=format&fit=crop';
@@ -147,9 +172,12 @@ const priceFor = (i: number, base: number) => base + ((i * 1379) % 24000);
 
 function buildVehicle(id: number, name: string, type: VehicleType, price: number, monthly: number, miles: number, make: VehicleMake, badge: VehicleBadge, year: number): Vehicle {
   const spec = TYPE_SPECS[type];
-  const gallery = PHOTO_POOL.slice(id % 14, (id % 14) + 4).length >= 4
-    ? PHOTO_POOL.slice(id % 14, (id % 14) + 4).map((p) => img(p, 1600))
-    : [...PHOTO_POOL.slice(id % 14), ...PHOTO_POOL.slice(0, 4 - (PHOTO_POOL.length - (id % 14)))].map((p) => img(p, 1600));
+  const pool = TYPE_PHOTOS[type];
+  const mainIndex = id % pool.length;
+  const galleryStart = id % pool.length;
+  const gallery = pool.slice(galleryStart, galleryStart + 4).length >= 4
+    ? pool.slice(galleryStart, galleryStart + 4).map((p) => img(p, 1600))
+    : [...pool.slice(galleryStart), ...pool.slice(0, 4 - (pool.length - galleryStart))].map((p) => img(p, 1600));
   const featureCount = 6 + (id % 5);
   const features = Array.from(new Set(Array.from({ length: featureCount }, (_, k) => FEATURES[(id + k * 3) % FEATURES.length])));
   return {
@@ -163,7 +191,7 @@ function buildVehicle(id: number, name: string, type: VehicleType, price: number
     miles,
     drivetrain: spec.drivetrain,
     badge,
-    image: img(PHOTO_POOL[id % PHOTO_POOL.length]),
+    image: img(pool[mainIndex]),
     transmission: spec.transmission,
     fuel: type === 'EV' ? 'Electric' : spec.fuel,
     color: COLORS[id % COLORS.length],
