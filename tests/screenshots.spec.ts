@@ -6,123 +6,147 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const OUT = path.join(__dirname, 'screenshots');
 
-async function scrollFullPage(page: Page, delayMs = 600) {
-  const height = await page.evaluate(() => document.body.scrollHeight);
-  const viewH = page.viewportSize()!.height;
-  let y = 0;
-  while (y < height) {
-    y += viewH;
-    await page.evaluate((scrollY) => window.scrollTo({ top: scrollY, behavior: 'instant' }), y);
-    await page.waitForTimeout(delayMs);
-  }
-  // Scroll back to top for a clean capture
-  await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
-  await page.waitForTimeout(300);
-}
-
-async function screenshotFullPage(page: Page, name: string) {
-  // Wait for network to settle
+/** Wait for page to settle, then capture a viewport-sized screenshot */
+async function captureViewport(page: Page, name: string) {
   await page.waitForLoadState('networkidle');
-  await page.waitForTimeout(800);
-
-  // Scroll through entire page to trigger lazy animations
-  await scrollFullPage(page, 700);
-
-  // Take full-page screenshot
+  await page.waitForTimeout(1200); // let entrance animations finish
   await page.screenshot({
     path: path.join(OUT, `${name}.png`),
-    fullPage: true,
+    fullPage: false,
   });
-  console.log(`  Captured: ${name}.png`);
+  console.log(`  ✓ ${name}.png`);
+}
+
+/** Scroll to a specific Y offset, wait for animations, capture viewport */
+async function captureAtScroll(page: Page, y: number, name: string) {
+  await page.evaluate((scrollY) => window.scrollTo({ top: scrollY, behavior: 'instant' }), y);
+  await page.waitForTimeout(800);
+  await page.screenshot({
+    path: path.join(OUT, `${name}.png`),
+    fullPage: false,
+  });
+  console.log(`  ✓ ${name}.png`);
+}
+
+/** Scroll through the page in steps, capture at each position */
+async function captureScrollSequence(page: Page, baseName: string, steps = 3) {
+  await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(1000);
+
+  const height = await page.evaluate(() => document.body.scrollHeight);
+  const viewH = page.viewportSize()!.height;
+  const maxScroll = Math.max(height - viewH, 0);
+
+  if (maxScroll <= 0) {
+    // Page fits in one viewport
+    await page.screenshot({ path: path.join(OUT, `${baseName}.png`), fullPage: false });
+    console.log(`  ✓ ${baseName}.png`);
+    return;
+  }
+
+  // Capture at top
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+  await page.waitForTimeout(600);
+  await page.screenshot({ path: path.join(OUT, `${baseName}-top.png`), fullPage: false });
+  console.log(`  ✓ ${baseName}-top.png`);
+
+  // Capture at evenly spaced scroll positions
+  for (let i = 1; i < steps; i++) {
+    const y = Math.round((maxScroll * i) / steps);
+    await captureAtScroll(page, y, `${baseName}-mid${i}`);
+  }
+
+  // Capture at bottom
+  await captureAtScroll(page, maxScroll, `${baseName}-bottom`);
 }
 
 // ─── User Routes ────────────────────────────────────────────────
 
-test.describe('User pages – desktop', () => {
+test.describe('User – Desktop 1440×900', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
-  test('home page', async ({ page }) => {
+  test('home', async ({ page }) => {
     await page.goto('/');
-    await screenshotFullPage(page, 'user-home-desktop');
+    await captureScrollSequence(page, 'user-home-desktop-1440x900', 3);
   });
 
-  test('inventory page', async ({ page }) => {
+  test('inventory', async ({ page }) => {
     await page.goto('/inventory');
-    await screenshotFullPage(page, 'user-inventory-desktop');
+    await captureScrollSequence(page, 'user-inventory-desktop-1440x900', 2);
   });
 
-  test('vehicle detail page', async ({ page }) => {
+  test('vehicle detail', async ({ page }) => {
     await page.goto('/vehicle/1');
-    await screenshotFullPage(page, 'user-vehicle-detail-desktop');
+    await captureScrollSequence(page, 'user-vehicle-desktop-1440x900', 3);
   });
 
-  test('finance page', async ({ page }) => {
+  test('finance', async ({ page }) => {
     await page.goto('/finance');
-    await screenshotFullPage(page, 'user-finance-desktop');
+    await captureScrollSequence(page, 'user-finance-desktop-1440x900', 2);
   });
 
-  test('trade-in page', async ({ page }) => {
+  test('trade-in', async ({ page }) => {
     await page.goto('/trade-in');
-    await screenshotFullPage(page, 'user-trade-in-desktop');
+    await captureScrollSequence(page, 'user-tradein-desktop-1440x900', 2);
   });
 
-  test('service page', async ({ page }) => {
+  test('service', async ({ page }) => {
     await page.goto('/service');
-    await screenshotFullPage(page, 'user-service-desktop');
+    await captureScrollSequence(page, 'user-service-desktop-1440x900', 2);
   });
 
-  test('contact page', async ({ page }) => {
+  test('contact', async ({ page }) => {
     await page.goto('/contact');
-    await screenshotFullPage(page, 'user-contact-desktop');
+    await captureScrollSequence(page, 'user-contact-desktop-1440x900', 2);
   });
 
-  test('checkout page', async ({ page }) => {
+  test('checkout', async ({ page }) => {
     await page.goto('/checkout/1');
-    await screenshotFullPage(page, 'user-checkout-desktop');
+    await captureScrollSequence(page, 'user-checkout-desktop-1440x900', 2);
   });
 });
 
-test.describe('User pages – mobile', () => {
+test.describe('User – Mobile 390×844', () => {
   test.use({ viewport: { width: 390, height: 844 } });
 
-  test('home page', async ({ page }) => {
+  test('home', async ({ page }) => {
     await page.goto('/');
-    await screenshotFullPage(page, 'user-home-mobile');
+    await captureScrollSequence(page, 'user-home-mobile-390x844', 4);
   });
 
-  test('inventory page', async ({ page }) => {
+  test('inventory', async ({ page }) => {
     await page.goto('/inventory');
-    await screenshotFullPage(page, 'user-inventory-mobile');
+    await captureScrollSequence(page, 'user-inventory-mobile-390x844', 3);
   });
 
-  test('vehicle detail page', async ({ page }) => {
+  test('vehicle detail', async ({ page }) => {
     await page.goto('/vehicle/1');
-    await screenshotFullPage(page, 'user-vehicle-detail-mobile');
+    await captureScrollSequence(page, 'user-vehicle-mobile-390x844', 3);
   });
 
-  test('finance page', async ({ page }) => {
+  test('finance', async ({ page }) => {
     await page.goto('/finance');
-    await screenshotFullPage(page, 'user-finance-mobile');
+    await captureScrollSequence(page, 'user-finance-mobile-390x844', 2);
   });
 
-  test('trade-in page', async ({ page }) => {
+  test('trade-in', async ({ page }) => {
     await page.goto('/trade-in');
-    await screenshotFullPage(page, 'user-trade-in-mobile');
+    await captureScrollSequence(page, 'user-tradein-mobile-390x844', 2);
   });
 
-  test('service page', async ({ page }) => {
+  test('service', async ({ page }) => {
     await page.goto('/service');
-    await screenshotFullPage(page, 'user-service-mobile');
+    await captureScrollSequence(page, 'user-service-mobile-390x844', 2);
   });
 
-  test('contact page', async ({ page }) => {
+  test('contact', async ({ page }) => {
     await page.goto('/contact');
-    await screenshotFullPage(page, 'user-contact-mobile');
+    await captureScrollSequence(page, 'user-contact-mobile-390x844', 2);
   });
 
-  test('checkout page', async ({ page }) => {
+  test('checkout', async ({ page }) => {
     await page.goto('/checkout/1');
-    await screenshotFullPage(page, 'user-checkout-mobile');
+    await captureScrollSequence(page, 'user-checkout-mobile-390x844', 2);
   });
 });
 
@@ -132,12 +156,8 @@ async function adminLogin(page: Page) {
   await page.goto('/admin');
   await page.waitForLoadState('networkidle');
   await page.waitForTimeout(500);
-
-  // If already logged in (dashboard visible), skip
-  const dashboardHeading = page.locator('text=Dashboard').first();
-  if (await dashboardHeading.isVisible({ timeout: 2000 }).catch(() => false)) return;
-
-  // Fill login form using exact IDs from AdminLoginPage
+  const dash = page.locator('text=Dashboard').first();
+  if (await dash.isVisible({ timeout: 2000 }).catch(() => false)) return;
   await page.fill('#username', 'admin');
   await page.fill('#password', 'admin123');
   await page.click('button[type="submit"]');
@@ -146,97 +166,80 @@ async function adminLogin(page: Page) {
   await page.waitForTimeout(1000);
 }
 
-test.describe('Admin pages – desktop', () => {
+test.describe('Admin – Desktop 1440×900', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
-  test('admin login page', async ({ page }) => {
+  test('login page', async ({ page }) => {
     await page.goto('/admin/login');
-    await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(500);
-    await page.screenshot({ path: path.join(OUT, 'admin-login-desktop.png'), fullPage: true });
-    console.log('  Captured: admin-login-desktop.png');
+    await captureViewport(page, 'admin-login-desktop-1440x900');
   });
 
-  test('admin dashboard', async ({ page }) => {
+  test('dashboard', async ({ page }) => {
     await adminLogin(page);
-    await screenshotFullPage(page, 'admin-dashboard-desktop');
+    await captureViewport(page, 'admin-dashboard-desktop-1440x900');
   });
 
-  test('admin inventory tab', async ({ page }) => {
+  test('vehicles tab', async ({ page }) => {
     await adminLogin(page);
-
-    const invTab = page.locator('button:has-text("Inventory"), [role="tab"]:has-text("Inventory")').first();
-    if (await invTab.isVisible({ timeout: 3000 }).catch(() => false)) {
-      await invTab.click();
-      await page.waitForTimeout(1000);
+    const tab = page.locator('button:has-text("Vehicles"), [role="tab"]:has-text("Vehicles")').first();
+    if (await tab.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await tab.click();
+      await page.waitForTimeout(800);
     }
-
-    await screenshotFullPage(page, 'admin-inventory-desktop');
+    await captureViewport(page, 'admin-vehicles-desktop-1440x900');
   });
 
-  test('admin leads tab', async ({ page }) => {
+  test('orders tab', async ({ page }) => {
     await adminLogin(page);
-
-    const leadsTab = page.locator('button:has-text("Leads"), [role="tab"]:has-text("Leads")').first();
-    if (await leadsTab.isVisible({ timeout: 3000 }).catch(() => false)) {
-      await leadsTab.click();
-      await page.waitForTimeout(1000);
+    const tab = page.locator('button:has-text("Orders"), [role="tab"]:has-text("Orders")').first();
+    if (await tab.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await tab.click();
+      await page.waitForTimeout(800);
     }
-
-    await screenshotFullPage(page, 'admin-leads-desktop');
+    await captureViewport(page, 'admin-orders-desktop-1440x900');
   });
 
-  test('admin orders tab', async ({ page }) => {
+  test('leads tab', async ({ page }) => {
     await adminLogin(page);
-
-    const ordersTab = page.locator('button:has-text("Orders"), [role="tab"]:has-text("Orders")').first();
-    if (await ordersTab.isVisible({ timeout: 3000 }).catch(() => false)) {
-      await ordersTab.click();
-      await page.waitForTimeout(1000);
+    const tab = page.locator('button:has-text("Leads"), [role="tab"]:has-text("Leads")').first();
+    if (await tab.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await tab.click();
+      await page.waitForTimeout(800);
     }
-
-    await screenshotFullPage(page, 'admin-orders-desktop');
+    await captureViewport(page, 'admin-leads-desktop-1440x900');
   });
 
-  test('admin settings tab', async ({ page }) => {
+  test('settings tab', async ({ page }) => {
     await adminLogin(page);
-
-    const settingsTab = page.locator('button:has-text("Settings"), [role="tab"]:has-text("Settings")').first();
-    if (await settingsTab.isVisible({ timeout: 3000 }).catch(() => false)) {
-      await settingsTab.click();
-      await page.waitForTimeout(1000);
+    const tab = page.locator('button:has-text("Settings"), [role="tab"]:has-text("Settings")').first();
+    if (await tab.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await tab.click();
+      await page.waitForTimeout(800);
     }
-
-    await screenshotFullPage(page, 'admin-settings-desktop');
+    await captureViewport(page, 'admin-settings-desktop-1440x900');
   });
 });
 
-test.describe('Admin pages – mobile', () => {
+test.describe('Admin – Mobile 390×844', () => {
   test.use({ viewport: { width: 390, height: 844 } });
 
-  test('admin login page', async ({ page }) => {
+  test('login page', async ({ page }) => {
     await page.goto('/admin/login');
-    await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(500);
-    await page.screenshot({ path: path.join(OUT, 'admin-login-mobile.png'), fullPage: true });
-    console.log('  Captured: admin-login-mobile.png');
+    await captureViewport(page, 'admin-login-mobile-390x844');
   });
 
-  test('admin dashboard', async ({ page }) => {
+  test('dashboard', async ({ page }) => {
     await adminLogin(page);
-    await screenshotFullPage(page, 'admin-dashboard-mobile');
+    await captureViewport(page, 'admin-dashboard-mobile-390x844');
   });
 
-  test('admin sidebar open', async ({ page }) => {
+  test('sidebar open', async ({ page }) => {
     await adminLogin(page);
-
-    // Try to open sidebar/menu
-    const menuBtn = page.locator('button:has-text("Menu"), button[aria-label*="menu" i]').first();
+    const menuBtn = page.locator('button[aria-label*="menu" i], button:has-text("Menu")').first();
     if (await menuBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
       await menuBtn.click();
       await page.waitForTimeout(500);
     }
-
-    await screenshotFullPage(page, 'admin-sidebar-mobile');
+    await captureViewport(page, 'admin-sidebar-mobile-390x844');
   });
 });
