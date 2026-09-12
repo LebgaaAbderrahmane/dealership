@@ -42,7 +42,7 @@ export function VehicleCard({ vehicle }: VehicleCardProps) {
             </h3>
           </div>
           <div className="mt-1 text-sm text-[var(--muted-foreground)]">
-            {formatDistance(vehicle.miles)} · {vehicle.drivetrain} · {vehicle.badge}
+            {formatDistance(vehicle.miles)} · {vehicle.drivetrain} · {vehicle.horsepower} hp
           </div>
           <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <span className="font-display text-2xl font-bold tabular-nums text-[var(--foreground)]">

@@ -110,7 +110,7 @@ const EMPTY_DRAFT: VehicleDraft = {
   year: new Date().getFullYear(),
   name: '',
   type: 'SUV',
-  make: 'Aurora',
+  make: 'Honda',
   price: 0,
   monthly: 0,
   miles: 0,

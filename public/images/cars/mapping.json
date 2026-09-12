@@ -1,0 +1,127 @@
+{
+  "honda-civic-sport": [
+    "/images/cars/honda-civic-sport/1.jpg",
+    "/images/cars/honda-civic-sport/2.jpg",
+    "/images/cars/honda-civic-sport/3.jpg"
+  ],
+  "toyota-camry-se": [
+    "/images/cars/toyota-camry-se/1.jpg",
+    "/images/cars/toyota-camry-se/2.jpg",
+    "/images/cars/toyota-camry-se/3.jpg"
+  ],
+  "bmw-330i": [
+    "/images/cars/bmw-330i/1.jpg",
+    "/images/cars/bmw-330i/2.jpg",
+    "/images/cars/bmw-330i/3.jpg"
+  ],
+  "mazda-3-sedan": [
+    "/images/cars/mazda-3-sedan/1.jpg",
+    "/images/cars/mazda-3-sedan/2.jpg",
+    "/images/cars/mazda-3-sedan/3.jpg"
+  ],
+  "hyundai-elantra": [
+    "/images/cars/hyundai-elantra/1.jpg",
+    "/images/cars/hyundai-elantra/2.jpg",
+    "/images/cars/hyundai-elantra/3.jpg"
+  ],
+  "toyota-rav4": [
+    "/images/cars/toyota-rav4/1.jpg",
+    "/images/cars/toyota-rav4/2.jpg",
+    "/images/cars/toyota-rav4/3.jpg"
+  ],
+  "honda-cr-v": [
+    "/images/cars/honda-cr-v/1.jpg",
+    "/images/cars/honda-cr-v/2.jpg",
+    "/images/cars/honda-cr-v/3.jpg"
+  ],
+  "bmw-x3": [
+    "/images/cars/bmw-x3/1.jpg",
+    "/images/cars/bmw-x3/2.jpg",
+    "/images/cars/bmw-x3/3.jpg"
+  ],
+  "mazda-cx-5": [
+    "/images/cars/mazda-cx-5/1.jpg",
+    "/images/cars/mazda-cx-5/2.jpg",
+    "/images/cars/mazda-cx-5/3.jpg"
+  ],
+  "hyundai-tucson": [
+    "/images/cars/hyundai-tucson/3.jpg",
+    "/images/cars/hyundai-tucson/3.jpg",
+    "/images/cars/hyundai-tucson/3.jpg"
+  ],
+  "ford-f150": [
+    "/images/cars/ford-f150/1.jpg",
+    "/images/cars/ford-f150/3.jpg",
+    "/images/cars/ford-f150/1.jpg"
+  ],
+  "chevrolet-silverado": [
+    "/images/cars/chevrolet-silverado/1.jpg",
+    "/images/cars/chevrolet-silverado/3.jpg",
+    "/images/cars/chevrolet-silverado/1.jpg"
+  ],
+  "ram-1500": [
+    "/images/cars/ram-1500/1.jpg",
+    "/images/cars/ram-1500/3.jpg",
+    "/images/cars/ram-1500/1.jpg"
+  ],
+  "ford-f150-lightning": [
+    "/images/cars/ford-f150-lightning/1.jpg",
+    "/images/cars/ford-f150-lightning/3.jpg",
+    "/images/cars/ford-f150-lightning/1.jpg"
+  ],
+  "tesla-model-3": [
+    "/images/cars/tesla-model-3/1.jpg",
+    "/images/cars/tesla-model-3/3.jpg",
+    "/images/cars/tesla-model-3/1.jpg"
+  ],
+  "tesla-model-y": [
+    "/images/cars/tesla-model-y/1.jpg",
+    "/images/cars/tesla-model-y/2.jpg",
+    "/images/cars/tesla-model-y/3.jpg"
+  ],
+  "hyundai-ioniq-6": [
+    "/images/cars/hyundai-ioniq-6/1.jpg",
+    "/images/cars/hyundai-ioniq-6/1.jpg",
+    "/images/cars/hyundai-ioniq-6/1.jpg"
+  ],
+  "bmw-m4": [
+    "/images/cars/bmw-m4/1.jpg",
+    "/images/cars/bmw-m4/2.jpg",
+    "/images/cars/bmw-m4/1.jpg"
+  ],
+  "ford-mustang": [
+    "/images/cars/ford-mustang/1.jpg",
+    "/images/cars/ford-mustang/2.jpg",
+    "/images/cars/ford-mustang/3.jpg"
+  ],
+  "chevrolet-camaro": [
+    "/images/cars/chevrolet-camaro/1.jpg",
+    "/images/cars/chevrolet-camaro/2.jpg",
+    "/images/cars/chevrolet-camaro/3.jpg"
+  ],
+  "jeep-grand-cherokee": [
+    "/images/cars/jeep-grand-cherokee/1.jpg",
+    "/images/cars/jeep-grand-cherokee/1.jpg",
+    "/images/cars/jeep-grand-cherokee/1.jpg"
+  ],
+  "subaru-outback": [
+    "/images/cars/subaru-outback/1.jpg",
+    "/images/cars/subaru-outback/2.jpg",
+    "/images/cars/subaru-outback/1.jpg"
+  ],
+  "mercedes-c300": [
+    "/images/cars/mercedes-c300/1.jpg",
+    "/images/cars/mercedes-c300/2.jpg",
+    "/images/cars/mercedes-c300/3.jpg"
+  ],
+  "audi-a4": [
+    "/images/cars/audi-a4/2.jpg",
+    "/images/cars/audi-a4/2.jpg",
+    "/images/cars/audi-a4/2.jpg"
+  ],
+  "porsche-718": [
+    "/images/cars/porsche-718/1.jpg",
+    "/images/cars/porsche-718/2.jpg",
+    "/images/cars/porsche-718/3.jpg"
+  ]
+}

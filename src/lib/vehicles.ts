@@ -68,21 +68,10 @@ export function useVehicles(query: VehicleQuery): VehiclePage {
   const [state, setState] = useState<VehiclePage>({ vehicles: [], total: 0, loading: true, error: false });
 
   useEffect(() => {
-    const params = buildVehicleQueryParams(query);
-    const controller = new AbortController();
     setState((s) => ({ ...s, loading: true }));
-    fetch(`/api/vehicles${params ? `?${params}` : ''}`, { signal: controller.signal })
-      .then((res) => (res.ok ? res.json() : Promise.reject(new Error('API unavailable'))))
-      .then((data: { vehicles: Vehicle[]; total: number }) =>
-        setState({ vehicles: data.vehicles, total: data.total, loading: false, error: false }),
-      )
-      .catch((err: unknown) => {
-        if ((err as Error).name === 'AbortError') return;
-        const list = filterStatic(query);
-        setState({ vehicles: list, total: list.length, loading: false, error: true });
-      });
-    return () => controller.abort();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const list = filterStatic(query);
+    setState({ vehicles: list, total: list.length, loading: false, error: false });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [buildVehicleQueryParams(query)]);
 
   return state;
@@ -116,12 +105,8 @@ export function useMeta(): Meta | null {
 export function useVehicle(id: string | undefined): { vehicle?: Vehicle; loading: boolean } {
   const [state, setState] = useState<{ vehicle?: Vehicle; loading: boolean }>({ loading: true });
   useEffect(() => {
-    if (!id) return;
-    setState({ loading: true });
-    fetch(`/api/vehicles/${id}`)
-      .then((res) => (res.ok ? res.json() : Promise.reject(new Error('API unavailable'))))
-      .then((vehicle: Vehicle) => setState({ vehicle, loading: false }))
-      .catch(() => setState({ vehicle: getVehicleById(id), loading: false }));
+    if (!id) { setState({ loading: false }); return; }
+    setState({ vehicle: getVehicleById(id), loading: false });
   }, [id]);
   return state;
 }
@@ -130,10 +115,7 @@ export function useSimilar(vehicle: Vehicle | undefined, limit = 3): Vehicle[] {
   const [list, setList] = useState<Vehicle[]>([]);
   useEffect(() => {
     if (!vehicle) return;
-    fetch(`/api/vehicles/${vehicle.id}/similar?limit=${limit}`)
-      .then((res) => (res.ok ? res.json() : Promise.reject(new Error('API unavailable'))))
-      .then((data: { vehicles: Vehicle[] }) => setList(data.vehicles))
-      .catch(() => setList(similarVehicles(vehicle, limit)));
+    setList(similarVehicles(vehicle, limit));
   }, [vehicle, limit]);
   return list;
 }
