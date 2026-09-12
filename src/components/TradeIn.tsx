@@ -20,7 +20,7 @@ const STEPS = [
 
 const FIELDS = [
   { name: 'Year', type: 'text', placeholder: 'e.g. 2020' },
-  { name: 'Make', type: 'text', placeholder: 'e.g. Aurora' },
+  { name: 'Make', type: 'text', placeholder: 'e.g. Honda' },
   { name: 'Model', type: 'text', placeholder: 'e.g. GT Line' },
   { name: 'Mileage', type: 'text', placeholder: 'e.g. 45,000' },
   { name: 'Condition', type: 'select', placeholder: 'Excellent · Good · Fair' },

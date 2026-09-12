@@ -169,7 +169,7 @@ export function ServicePage() {
                     <Input required type="number" name="year" placeholder="2021" />
                   </Field>
                   <Field label="Vehicle make & model">
-                    <Input required name="vehicle" placeholder="Aurora GT Line" />
+                    <Input required name="vehicle" placeholder="e.g. Honda Civic Sport" />
                   </Field>
                 </div>
                 <div className="mt-5">

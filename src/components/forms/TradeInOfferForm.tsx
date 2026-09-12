@@ -16,19 +16,27 @@ interface OfferInputs {
 }
 
 const MAKE_BASE: Record<string, number> = {
-  Aurora: 24500,
-  Vantage: 26000,
-  Nimbus: 28000,
-  Ridgeback: 27000,
-  Corsa: 25000,
-  Meridian: 22000,
+  Honda: 22000,
+  Toyota: 24000,
+  BMW: 32000,
+  Mazda: 23000,
+  Hyundai: 21000,
+  Ford: 28000,
+  Chevrolet: 27000,
+  Ram: 30000,
+  Tesla: 38000,
+  Subaru: 25000,
+  Jeep: 29000,
+  Porsche: 55000,
+  'Mercedes-Benz': 40000,
+  Audi: 38000,
 };
 
 const CONDITION_MULT = { Excellent: 1.15, Good: 1, Fair: 0.82, Poor: 0.6 } as const;
 
 const INITIAL: OfferInputs = {
   year: '',
-  make: 'Aurora',
+  make: 'Honda',
   model: '',
   trim: '',
   mileage: '',

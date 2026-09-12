@@ -146,12 +146,12 @@ export function VehicleDetailPage() {
               </p>
 
               <div className="mt-6 rounded-xl border border-[var(--border)] bg-[var(--card)] px-4 py-2">
-                <SpecRow label="Mileage" value={formatDistance(vehicle.miles)} />
-                <SpecRow label="Drivetrain" value={vehicle.drivetrain} />
-                <SpecRow label="Transmission" value={vehicle.transmission} />
-                <SpecRow label="Fuel" value={vehicle.fuel} />
-                <SpecRow label="Color" value={vehicle.color} />
-                <SpecRow label="MPG" value={vehicle.mpg > 0 ? `${vehicle.mpg} city/hwy` : 'N/A · Electric'} />
+                <SpecRow label="Engine" value={vehicle.engine} />
+                <SpecRow label="Horsepower" value={`${vehicle.horsepower} hp`} />
+                <SpecRow label="Torque" value={`${vehicle.torque} Nm`} />
+                <SpecRow label="0–60 mph" value={`${vehicle.acceleration}s`} />
+                <SpecRow label="Top Speed" value={`${vehicle.topSpeed} mph`} />
+                <SpecRow label="MPG" value={vehicle.mpg > 0 ? `${vehicle.mpg} city/hwy` : vehicle.batteryCapacity ? `${vehicle.batteryCapacity} kWh · ${vehicle.range} mi range` : 'N/A'} />
               </div>
 
               <div className="mt-6">
@@ -192,10 +192,21 @@ export function VehicleDetailPage() {
               <SpecRow label="Make" value={vehicle.make} />
               <SpecRow label="Model year" value={String(vehicle.year)} />
               <SpecRow label="Body style" value={vehicle.type} />
+              <SpecRow label="Engine" value={vehicle.engine} />
+              <SpecRow label="Horsepower" value={`${vehicle.horsepower} hp`} />
+              <SpecRow label="Torque" value={`${vehicle.torque} Nm`} />
+              <SpecRow label="0–60 mph" value={`${vehicle.acceleration}s`} />
+              <SpecRow label="Top Speed" value={`${vehicle.topSpeed} mph`} />
               <SpecRow label="Drivetrain" value={vehicle.drivetrain} />
               <SpecRow label="Transmission" value={vehicle.transmission} />
               <SpecRow label="Fuel type" value={vehicle.fuel} />
               <SpecRow label="Exterior color" value={vehicle.color} />
+              <SpecRow label="Seating" value={`${vehicle.seats} seats`} />
+              <SpecRow label="Doors" value={String(vehicle.doors)} />
+              <SpecRow label="Cargo volume" value={`${vehicle.cargoVolume} cu ft`} />
+              {vehicle.towingCapacity && <SpecRow label="Towing capacity" value={`${vehicle.towingCapacity.toLocaleString()} lbs`} />}
+              {vehicle.batteryCapacity && <SpecRow label="Battery" value={`${vehicle.batteryCapacity} kWh`} />}
+              {vehicle.range && <SpecRow label="Range" value={`${vehicle.range} miles`} />}
               <SpecRow label="Combined MPG" value={vehicle.mpg > 0 ? String(vehicle.mpg) : 'Electric'} />
               <SpecRow label="Stock number" value={vehicle.stock} />
             </div>
